@@ -1,10 +1,28 @@
 <?php
 session_start();
+include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
+
+$q = "SELECT * FROM usuarios WHERE Usuario = '".$usuario."'";
+	$consulta = $conexion->query($q);
+	$perfil = $consulta->fetch_array();
+	if($perfil > 0){
+		$user = $perfil;
+	}
+	
+$conexion->close();
+
 ?>
-	<title>Representative</title>
+	<title>Mi perfil</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/cliente.css">
+	<link rel="stylesheet" href="../css/main.css">
+	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
 		<!-- SideBar -->
@@ -19,7 +37,7 @@ session_start();
 				<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/personp.png" alt="UserIcon">
-					<figcaption class="text-center text-titles">Admin</figcaption>
+					<figcaption class="text-center text-titles">Bienvenido: <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
 				</figure>
 				<ul class="full-box list-unstyled text-center">
 					<!--<li>
@@ -37,11 +55,11 @@ session_start();
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="inicio.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-- <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -82,11 +100,11 @@ session_start();
 				</li>
 				<li>
 					<a href="#!" class="btn-sideBar-SubMenu"><img src="../img/store.png" alt="bird">
-						<!--<i class="zmdi zmdi-card zmdi-hc-fw"></i>--> Mercados <i class="zmdi zmdi-caret-down pull-right"></i>
+						<!--<i class="zmdi zmdi-card zmdi-hc-fw"></i>--> Productor <i class="zmdi zmdi-caret-down pull-right"></i>
 					</a>
 					<ul class="list-unstyled full-box">
 						<li>
-							<a href="mercadocli.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados</a>
+							<a href="mercadocli.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Productor</a>
 						</li>
 						<!--<li>
 							<a href="payments.html"><i class="zmdi zmdi-money zmdi-hc-fw"></i> Payments</a>
@@ -166,10 +184,10 @@ session_start();
 			<div class="page-header">
 			  <h1 class="text-titles"><img src="../img/2.jpg" alt="bir"><!--<i class="zmdi zmdi-male-female zmdi-hc-fw"></i>--> Usuario <small>Perfil</small></h1>
 			</div>
-			<p class="lead">En esta parte puedes agregar y editar a los usuarios que contiene el sistema!</p>
+			<p class="lead">Perfil de usuario del productor que se encuentra en el sistema!</p>
 		</div>
 		<div class="container-fluid">
-			<div class="row">
+			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
 					  	<li class="active"><a href="#new" data-toggle="tab">New</a></li>
@@ -313,7 +331,28 @@ session_start();
 					  	</div>
 					</div>
 				</div>
-			</div>
+			</div>-->
+			<table border= "2">
+			<tr>
+				<td>Id:</td>
+				<td><?php echo $user['id']; ?></td>
+				<!-- $id_sesion -->
+			</tr>
+			<tr>
+				<td>usuario</td>
+				<td><?php echo $user['Usuario']; ?></td>
+				<!-- $usuario_sesion -->
+			</tr>
+			<tr>
+				<td>contraseña</td>
+				<td><?php echo $user['Contraseña']; ?></td>
+				<!-- $contraseña_sesion -->
+			</tr>
+			<tr>
+			<td><a href="editarpercli.php?id=<?php echo $user['id'];?>" >modificar</a></td>
+			</tr>
+		
+		</table>
 		</div>
 	</section>
 

@@ -1,6 +1,16 @@
 <?php
 session_start();
 include '../conexion.php';
+// Consultar la base de datos
+/*$consulta_mysql='select * from Amigos';
+$resultado_consulta_mysql=mysql_query($consulta_mysql,$conexion);
+  
+echo "<select name='select1'>";
+while($fila=mysql_fetch_array($resultado_consulta_mysql)){
+    echo "<option value='".$fila['nombre']."'>".$fila['nombre']."</option>";
+}
+echo "</select>";*/
+
 $usuario = $_SESSION['usuario'];
 if (!isset($usuario)) {
 	header("Location: ../login.php");
@@ -15,13 +25,26 @@ d.iddireccion, d.Calle, d.Numinter, d.Numext, d.Colonia, d.Ciudad, d.Estado, d.i
 FROM usuarios u INNER JOIN productor p ON u.id = p.idproductor INNER JOIN direccion d ON p.idproductor = d.id_productor WHERE usuario = '".$usuario."'";
 $verificar = $conexion->query($unir);
 $separar = $verificar->fetch_array();
+
+// Consultar la base de datos
+$consult="SELECT * FROM certificacion";
+//$resultadoc=mysqli_query($conexion, $consult);
+$resultadoc = $conexion->query($consult);
+  
+//echo "<select name='select1'>";
+while($fila=mysqli_fetch_array($resultadoc)){
+    echo "<option value='".$fila['idcertificacion']."'>".$fila['Numcert']."</option>";
+}
+//echo "</select>";
+
 	
 $conexion->close();
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>Datos perfil</title>
+	<title>Productos</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/cliente.css">
@@ -187,9 +210,9 @@ $conexion->close();
 		<!-- Content page -->
 		<div class="container-fluid">
 			<div class="page-header">
-			  <h1 class="text-titles"><img src="../img/shoppingb.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados <small>lista</small></h1>
+			  <h1 class="text-titles"><img src="../img/orgaprod.png" alt="bir"><!--<i class="zmdi zmdi-book zmdi-hc-fw"></i>--> Productos <small>lista</small></h1>
 			</div>
-			<p class="lead">Muestra los datos registrados del productor en el sistema !</p>
+			<p class="lead">ingresa productos </p>
 		</div>
 		<div class="container-fluid">
 			<!--<div class="row">
@@ -205,35 +228,18 @@ $conexion->close();
 									<div class="col-xs-12 col-md-10 col-md-offset-1">
 									    <form action="">
 									    	<div class="form-group label-floating">
-											  <label class="control-label">Payment</label>
+											  <label class="control-label">Code</label>
 											  <input class="form-control" type="text">
 											</div>
-											<div class="form-group label-floating">
-											  <label class="control-label">Amount</label>
+									    	<div class="form-group label-floating">
+											  <label class="control-label">Name</label>
 											  <input class="form-control" type="text">
 											</div>
-											<div class="form-group label-floating">
-											  <label class="control-label">Student Code</label>
-											  <textarea class="form-control"></textarea>
-											</div>
 											<div class="form-group">
-										        <label class="control-label">Section</label>
+										      <label class="control-label">Status</label>
 										        <select class="form-control">
-										          <option>1 grade</option>
-										          <option>2 grade</option>
-										          <option>3 grade</option>
-										          <option>4 grade</option>
-										          <option>5 grade</option>
-										        </select>
-										    </div>
-											<div class="form-group">
-										        <label class="control-label">Year</label>
-										        <select class="form-control">
-										          <option>2017</option>
-										          <option>2016</option>
-										          <option>2015</option>
-										          <option>2014</option>
-										          <option>2013</option>
+										          <option>Active</option>
+										          <option>Disable</option>
 										        </select>
 										    </div>
 										    <p class="text-center">
@@ -250,12 +256,9 @@ $conexion->close();
 									<thead>
 										<tr>
 											<th class="text-center">#</th>
-											<th class="text-center">Payment</th>
-											<th class="text-center">Amount</th>
-											<th class="text-center">Pending</th>
-											<th class="text-center">Student</th>
-											<th class="text-center">Section</th>
-											<th class="text-center">Year</th>
+											<th class="text-center">Code</th>
+											<th class="text-center">Name</th>
+											<th class="text-center">Status</th>
 											<th class="text-center">Update</th>
 											<th class="text-center">Delete</th>
 										</tr>
@@ -263,45 +266,33 @@ $conexion->close();
 									<tbody>
 										<tr>
 											<td>1</td>
-											<td>$70</td>
-											<td>$40</td>
-											<td>$30</td>
-											<td>Carlos Alfaro</td>
-											<td>Section</td>
-											<td>2017</td>
+											<td>100</td>
+											<td>Mathematics</td>
+											<td>Active</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>2</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Claudia Rodriguez</td>
-											<td>Section</td>
-											<td>2017</td>
+											<td>500</td>
+											<td>Science</td>
+											<td>Active</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>3</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Alicia Melendez</td>
-											<td>Section</td>
-											<td>2017</td>
+											<td>300</td>
+											<td>Social</td>
+											<td>Active</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>4</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Alba Bonilla</td>
-											<td>Section</td>
-											<td>2017</td>
+											<td>700</td>
+											<td>English</td>
+											<td>Active</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
@@ -321,32 +312,33 @@ $conexion->close();
 					</div>
 				</div>
 			</div>-->
-			<table border="1">
-			<tr>
-				<td>Nombre:</td>
-				<td><?php echo $separar['Nombre']; ?></td>
-				<!-- $id_sesion -->
-			</tr>
-			<tr>
-				<td>Apellido Paterno:</td>
-				<td><?php echo $separar['Apellidopaterno']; ?></td>
-				<!-- $usuario_sesion -->
-			</tr>
-			<tr>
-				<td>Apellido Materno:</td>
-				<td><?php echo $separar['Apellidomaterno']; ?></td>
-				<!-- $contraseña_sesion -->
-			</tr>
-			<tr>
-				<td>Teléfono:</td>
-				<td><?php echo $separar['Telefono']; ?></td>
-				<!-- $contraseña_sesion -->
-			</tr>
-			<tr>
-			<td><a href="editardatcli.php?idproductor=<?php echo $separar['idproductor'];?>" >modificar</a></td>
-			</tr>
-		</table>
-		
+            <form action="validarre.php" method="post">
+
+    <h4>Registro Producto</h4>
+    <div class="ub1">Nombre del producto: </div>
+    <input class="controls" type="text" name="nombre" placeholder="Ingrese Nombre del producto" required><br>
+	<div class="ub1">cantidad de producto: </div>
+    <input class="controls" type="text" name="apellidop" placeholder="Ingrese cantidad de producto"><br>
+	<div class="ub1">Precio del producto: </div>
+    <input class="controls" type="text" name="apellidom" placeholder="Ingrese precio" required><br>
+	<div class="ub1">Descripcion: </div>
+    <input class="controls" type="text" name="telefono" placeholder="descripcion" required>
+	<td>
+		<h4>seleccione numero de certificado:</h4>
+    <select name="select1">
+      <option value="0" style="display:none;"><label>Seleccionar</label></option>
+      <!--<option value="2">Productor</option>
+      <option value="3">Mercado</option>-->
+    </select>
+    </td>
+	<br>
+	<br>
+    <input class="botons" type="submit" value="Registrar" name="btnregistrar">
+  <!--</section>-->
+
+  </form>
+
+			
 		</div>
 	</section>
 
@@ -416,7 +408,7 @@ $conexion->close();
 			    </div>
 			    <div class="modal-body">
 			        <p>
-			        	En esta ventana muestra!
+			        	En esta ventana se muestra!
 			        </p>
 			    </div>
 		      	<div class="modal-footer">

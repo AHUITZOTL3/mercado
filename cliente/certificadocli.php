@@ -1,13 +1,27 @@
 <?php
 session_start();
+include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
+
+$consulta = "SELECT * FROM usuarios WHERE Usuario = '$usuario'";
+$ejecuta = $conexion->query($consulta);
+$extraer = $ejecuta->fetch_assoc();
+
+//$conexion->close();
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>Certificacion</title>
+	<title>Certificado</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/cliente.css">
+	<link rel="stylesheet" href="../css/main.css">
+	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
 	<!-- SideBar -->
@@ -22,7 +36,7 @@ session_start();
 			<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/personp.png" alt="UserIcon">
-					<figcaption class="text-center text-titles">Usuario</figcaption>
+					<figcaption class="text-center text-titles">Bienvenido: <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
 				</figure>
 				<ul class="full-box list-unstyled text-center">
 					<!--<li>
@@ -40,11 +54,11 @@ session_start();
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="inicio.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-- <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -85,11 +99,11 @@ session_start();
 				</li>
 				<li>
 					<a href="#!" class="btn-sideBar-SubMenu"><img src="../img/store.png" alt="bird">
-						<!--<i class="zmdi zmdi-card zmdi-hc-fw"></i>--> Mercados <i class="zmdi zmdi-caret-down pull-right"></i>
+						<!--<i class="zmdi zmdi-card zmdi-hc-fw"></i>--> Productor <i class="zmdi zmdi-caret-down pull-right"></i>
 					</a>
 					<ul class="list-unstyled full-box">
 						<li>
-							<a href="mercadocli.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados</a>
+							<a href="mercadocli.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Productor</a>
 						</li>
 						<!--<li>
 							<a href="payments.html"><i class="zmdi zmdi-money zmdi-hc-fw"></i> Payments</a>
@@ -170,10 +184,10 @@ session_start();
 			<div class="page-header">
 			  <h1 class="text-titles"><img src="../img/cv.png" alt="bir"><!--<i class="zmdi zmdi-timer zmdi-hc-fw"></i>--> Certificado <small>¡¡</small></h1>
 			</div>
-			<p class="lead">Aqui puede ingresar su informacion refrente a su certificado del certificado!</p>
+			<p class="lead">Aqui puede ingresar su informacion refrente a su certificado de productos organicos!</p>
 		</div>
 		<div class="container-fluid">
-			<div class="row">
+			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
 					  	<li class="active"><a href="#new" data-toggle="tab">New</a></li>
@@ -288,7 +302,52 @@ session_start();
 					  	</div>
 					</div>
 				</div>
+			</div>-->
+			<form action="">
+		<!--<input class="botons" type="submit" value="Registrar" name="btnregistrar">-->
+		<a href="regiscertificli.php">Registrar</a></td>
+		</form>
+		<table>	
+				<div id="barrabuscar">
+			<form method="POST">
+			<input type="submit" value="Buscar" name="btnbuscar"><input type="text" name="txtbuscar" id="cajabuscar" placeholder="&#128270;Ingresar nombre de usuario">
+			</form>
 			</div>
+				<tr><th colspan="5"><h1>LISTA CERTIFICADOS</h1><th><a style="font-weight: normal; font-size: 14px;" onclick="abrirform()">Agregar</a></th></tr>
+				<tr>
+				<th>Id</th>
+				<th>Numero de certificado</th>
+				<th>Fecha de vencimiento</th>
+				<th>Certificadora</th>
+				<th>Alcance</th>
+				<!--<th>Acción</th>-->
+				</tr>
+			<?php 
+
+		if(isset($_POST['btnbuscar']))
+		{
+		$buscar = $_POST['txtbuscar'];
+		$queryusuarios = mysqli_query($conexion, "SELECT idcertificacion,Numcert,Fechaven,Certificadoraem FROM certificacion where nom like '".$buscar."%'");
+		}
+		else
+		{
+		$queryusuarios = mysqli_query($conexion, "SELECT * FROM certificacion ORDER BY idcertificacion asc");
+		}
+		//$numerofila = 0;
+        while($mostrar = mysqli_fetch_array($queryusuarios)) 
+		{    //$numerofila++;    
+            echo "<tr>";
+			//echo "<td>".$numerofila."</td>";
+			echo "<td>".$mostrar['idcertificacion']."</td>";
+            echo "<td>".$mostrar['Numcert']."</td>";
+            echo "<td>".$mostrar['Fechaven']."</td>";
+            echo "<td>".$mostrar['Certificadoraem']."</td>";    
+			echo "<td>".$mostrar['Alcance']."</td>";  
+            echo "<td style='width:26%'><a href=\"editar.php?idcertificacion=$mostrar[idcertificacion]\">Modificar</a> | <a href=\"eliminar.php?cod=$mostrar[idcertificacion]\" onClick=\"return confirm('¿Estás seguro de eliminar a $mostrar[Numcert]?')\">Eliminar</a></td>";           
+		}
+        ?>
+    	</table>
+
 		</div>
 	</section>
 

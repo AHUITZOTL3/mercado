@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../conexion.php';
+
 $usuario = $_SESSION['usuario'];
 if (!isset($usuario)) {
 	header("Location: ../login.php");
@@ -15,7 +16,26 @@ d.iddireccion, d.Calle, d.Numinter, d.Numext, d.Colonia, d.Ciudad, d.Estado, d.i
 FROM usuarios u INNER JOIN productor p ON u.id = p.idproductor INNER JOIN direccion d ON p.idproductor = d.id_productor WHERE usuario = '".$usuario."'";
 $verificar = $conexion->query($unir);
 $separar = $verificar->fetch_array();
-	
+
+$id = $_GET['idproductor'];
+$m = "SELECT * FROM productor WHERE idproductor = '$id'";
+$modificar = $conexion->query($m);
+$row = $modificar->fetch_array(MYSQLI_ASSOC);
+if(isset($_POST['modificar'])){
+// recuparar los datos que se encuentran en cada uno de los imputs
+ $id = $_POST['idd'];
+ $cal = $conexion->real_escape_string($_POST['calle']);
+ $numin = $conexion->real_escape_string($_POST['numi']);
+ $numex = $conexion->real_escape_string($_POST['nume']);
+ $colo = $conexion->real_escape_string($_POST['col']);
+ $ciud = $conexion->real_escape_string($_POST['ciu']);
+ $esta = $conexion->real_escape_string($_POST['est']);
+ // realizar la consulta para modificar los datos
+ $actuliza = "UPDATE productor SET Nombre ='$cal', Apellidopaterno ='$numin', Apellidomaterno ='$numex', Telefono ='$colo' WHERE idproductor = '$id'";
+ $actualizar = $conexion->query($actuliza);
+ header("location:mercadocli.php");
+}
+
 $conexion->close();
 ?>
 <!DOCTYPE html>
@@ -104,11 +124,11 @@ $conexion->close();
 				</li>
 				<li>
 					<a href="#!" class="btn-sideBar-SubMenu"><img src="../img/store.png" alt="bird">
-						<!--<i class="zmdi zmdi-card zmdi-hc-fw"></i>--> Productor <i class="zmdi zmdi-caret-down pull-right"></i>
+						<!--<i class="zmdi zmdi-card zmdi-hc-fw"></i>--> Mercados <i class="zmdi zmdi-caret-down pull-right"></i>
 					</a>
 					<ul class="list-unstyled full-box">
 						<li>
-							<a href="mercadocli.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Productor</a>
+							<a href="mercadocli.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados</a>
 						</li>
 						<!--<li>
 							<a href="payments.html"><i class="zmdi zmdi-money zmdi-hc-fw"></i> Payments</a>
@@ -189,7 +209,7 @@ $conexion->close();
 			<div class="page-header">
 			  <h1 class="text-titles"><img src="../img/shoppingb.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados <small>lista</small></h1>
 			</div>
-			<p class="lead">Muestra los datos registrados del productor en el sistema !</p>
+			<p class="lead">Muestra los datos sobre el productor en el sistema y los edita!</p>
 		</div>
 		<div class="container-fluid">
 			<!--<div class="row">
@@ -321,32 +341,26 @@ $conexion->close();
 					</div>
 				</div>
 			</div>-->
-			<table border="1">
-			<tr>
-				<td>Nombre:</td>
-				<td><?php echo $separar['Nombre']; ?></td>
-				<!-- $id_sesion -->
-			</tr>
-			<tr>
-				<td>Apellido Paterno:</td>
-				<td><?php echo $separar['Apellidopaterno']; ?></td>
-				<!-- $usuario_sesion -->
-			</tr>
-			<tr>
-				<td>Apellido Materno:</td>
-				<td><?php echo $separar['Apellidomaterno']; ?></td>
-				<!-- $contraseña_sesion -->
-			</tr>
-			<tr>
-				<td>Teléfono:</td>
-				<td><?php echo $separar['Telefono']; ?></td>
-				<!-- $contraseña_sesion -->
-			</tr>
-			<tr>
-			<td><a href="editardatcli.php?idproductor=<?php echo $separar['idproductor'];?>" >modificar</a></td>
-			</tr>
-		</table>
-		
+            <h3>Editar perfil:</h3>
+		<form class="" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+            <div class="row">
+                <input type="hidden" name="idd" value="<?php echo $row['idproductor']; ?>">
+                <input type="text" name="calle" class="form-control" value="<?php echo $row['Nombre']; ?>">
+            </div>
+            <div class="row">
+                <input type="text" name="numi" class="form-control" value="<?php echo $row['Apellidopaterno']; ?>" >
+            </div>
+            <div class="row">
+                <input type="text" name="nume" class="form-control" value="<?php echo $row['Apellidomaterno']; ?>" >
+            </div>
+            <div class="row">
+                <input type="text" name="col" class="form-control" value="<?php echo $row['Telefono']; ?>" >
+            </div>
+            <div class="row">
+                <input type="submit" name="modificar" class="btn btn-success btn-sm btn-block" value="Modificar">
+            </div>
+        </form>
+
 		</div>
 	</section>
 

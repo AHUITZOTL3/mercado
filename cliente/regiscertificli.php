@@ -1,27 +1,56 @@
 <?php
-session_start();
 include '../conexion.php';
+session_start();
+//echo session_id();
+
 $usuario = $_SESSION['usuario'];
 if (!isset($usuario)) {
 	header("Location: ../login.php");
 }
-
-$consulta = "SELECT * FROM usuarios WHERE Usuario = '$usuario'";
+ /*echo $usuario;
+ $session_id = session_id();
+ $_SESSION['id'] = $session_id;
+ var_dump($_SESSION['id']);*/
+$consulta = "SELECT * FROM usuarios WHERE id = '$usuario'";
 $ejecuta = $conexion->query($consulta);
 $extraer = $ejecuta->fetch_assoc();
 
-$unir = "SELECT u.id, u.Usuario, u.Contraseña, u.id_rol, p.idproductor, p.Nombre, p.Apellidopaterno, p.Apellidomaterno, p.Telefono, p.id_usuario, 
-d.iddireccion, d.Calle, d.Numinter, d.Numext, d.Colonia, d.Ciudad, d.Estado, d.id_productor 
-FROM usuarios u INNER JOIN productor p ON u.id = p.idproductor INNER JOIN direccion d ON p.idproductor = d.id_productor WHERE usuario = '".$usuario."'";
+$unir = "SELECT u.id, u.Usuario, u.Contraseña, u.id_rol, c.idcertificacion, c.Numcert, c.Fechaven, c.Certificadoraem, c.Alcance, c.id_usuarioo 
+FROM usuarios u INNER JOIN certificacion c ON u.id = c.id_usuarioo WHERE usuario = '".$usuario."'";
 $verificar = $conexion->query($unir);
 $separar = $verificar->fetch_array();
-	
+
+/*$id = $_SESSION['Session'];
+$m = "SELECT id FROM usuarios WHERE id = '".$id."'";
+$modificar = $conexion->query($m);
+$row = $modificar->fetch_array(MYSQLI_ASSOC);*/
+if(isset($_POST['modificar'])){
+// recuparar los datos que se encuentran en cada uno de los imputs
+ $id = $_POST['id'];
+ $num = $_POST['numero'];
+ $venc = $_POST['vencido'];
+ $emp = $_POST['empresa'];
+ $alc = $_POST['alcance'];
+ // realizar la consulta para modificar los datos
+ $id = $_SESSION['Session'];
+$m = "SELECT id FROM usuarios WHERE Usuario = '".$id."'";
+$modificar = $conexion->query($m);
+$row = $modificar->fetch_array(MYSQLI_ASSOC);
+ 
+ $insertar = "INSERT INTO certificacion (Numcert,Fechaven,Certificadoraem,Alcance,id_usuarioo) VALUES ('$num','$venc','$emp','$alc','$extraer') ";
+ $query = mysqli_query($conexion, $insertar);
+//'".$id."'
+ //$actuliza = "UPDATE productor SET Nombre ='$cal', Apellidopaterno ='$numin', Apellidomaterno ='$numex', Telefono ='$colo' WHERE idproductor = '$id'";
+ //$actualizar = $conexion->query($actuliza);
+ header("location:certificadocli.php");
+}
+
 $conexion->close();
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>Datos perfil</title>
+	<title>Certificado</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/cliente.css">
@@ -90,15 +119,15 @@ $conexion->close();
 					<ul class="list-unstyled full-box">
 						<!--<li>
 							<a href="admin.php"><img src="../img/idicon.png" alt="bir"><!--<i class="zmdi zmdi-account zmdi-hc-fw"></i> Admin</a>
-						</li>-->
-						<!--<li>
+						</li>
+						<li>
 							<a href="teacher.html"><i class="zmdi zmdi-male-alt zmdi-hc-fw"></i> Teacher</a>
 						</li>
 						<li>
 							<a href="student.html"><i class="zmdi zmdi-face zmdi-hc-fw"></i> Student</a>
 						</li>-->
 						<li>
-							<a href="usuariocli.php"><img src="../img/clientp.png" alt="bir"><!--<i class="zmdi zmdi-male-female zmdi-hc-fw">--></i> Perfil</a>
+							<a href="usuariocli.php"><img src="../img/clientp.png" alt="bir"><!--<i class="zmdi zmdi-male-female zmdi-hc-fw"></i>--> Perfil</a>
 						</li>
 					</ul>
 				</li>
@@ -187,9 +216,9 @@ $conexion->close();
 		<!-- Content page -->
 		<div class="container-fluid">
 			<div class="page-header">
-			  <h1 class="text-titles"><img src="../img/shoppingb.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados <small>lista</small></h1>
+			  <h1 class="text-titles"><img src="../img/cv.png" alt="bir"><!--<i class="zmdi zmdi-timer zmdi-hc-fw"></i>--> Certificado <small>¡¡</small></h1>
 			</div>
-			<p class="lead">Muestra los datos registrados del productor en el sistema !</p>
+			<p class="lead">Aqui puede ingresar su informacion refrente a su certificado !</p>
 		</div>
 		<div class="container-fluid">
 			<!--<div class="row">
@@ -205,35 +234,33 @@ $conexion->close();
 									<div class="col-xs-12 col-md-10 col-md-offset-1">
 									    <form action="">
 									    	<div class="form-group label-floating">
-											  <label class="control-label">Payment</label>
+											  <label class="control-label">Name</label>
 											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group">
+										      <label class="control-label">Status</label>
+										        <select class="form-control">
+										          <option>Active</option>
+										          <option>Disable</option>
+										        </select>
+										    </div>
+											<div class="form-group">
+											  <label class="control-label">Start Date</label>
+											  <input class="form-control" type="date">
+											</div>
+											<div class="form-group">
+											  <label class="control-label">End Date</label>
+											  <input class="form-control" type="date">
 											</div>
 											<div class="form-group label-floating">
 											  <label class="control-label">Amount</label>
 											  <input class="form-control" type="text">
 											</div>
-											<div class="form-group label-floating">
-											  <label class="control-label">Student Code</label>
-											  <textarea class="form-control"></textarea>
-											</div>
-											<div class="form-group">
-										        <label class="control-label">Section</label>
-										        <select class="form-control">
-										          <option>1 grade</option>
-										          <option>2 grade</option>
-										          <option>3 grade</option>
-										          <option>4 grade</option>
-										          <option>5 grade</option>
-										        </select>
-										    </div>
 											<div class="form-group">
 										        <label class="control-label">Year</label>
 										        <select class="form-control">
 										          <option>2017</option>
 										          <option>2016</option>
-										          <option>2015</option>
-										          <option>2014</option>
-										          <option>2013</option>
 										        </select>
 										    </div>
 										    <p class="text-center">
@@ -250,12 +277,12 @@ $conexion->close();
 									<thead>
 										<tr>
 											<th class="text-center">#</th>
-											<th class="text-center">Payment</th>
+											<th class="text-center">Name</th>
+											<th class="text-center">Status</th>
+											<th class="text-center">Start Date</th>
+											<th class="text-center">End Date</th>
 											<th class="text-center">Amount</th>
-											<th class="text-center">Pending</th>
-											<th class="text-center">Student</th>
-											<th class="text-center">Section</th>
-											<th class="text-center">Year</th>
+											<th class="text-center">year</th>
 											<th class="text-center">Update</th>
 											<th class="text-center">Delete</th>
 										</tr>
@@ -263,44 +290,33 @@ $conexion->close();
 									<tbody>
 										<tr>
 											<td>1</td>
-											<td>$70</td>
+											<td>First</td>
+											<td>Active</td>
+											<td>07/01/2017</td>
+											<td>06/04/2017</td>
 											<td>$40</td>
-											<td>$30</td>
-											<td>Carlos Alfaro</td>
-											<td>Section</td>
 											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>2</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Claudia Rodriguez</td>
-											<td>Section</td>
+											<td>Second</td>
+											<td>Active</td>
+											<td>07/04/2017</td>
+											<td>06/08/2017</td>
+											<td>$40</td>
 											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>3</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Alicia Melendez</td>
-											<td>Section</td>
-											<td>2017</td>
-											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
-											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
-										</tr>
-										<tr>
-											<td>4</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Alba Bonilla</td>
-											<td>Section</td>
+											<td>Third</td>
+											<td>Active</td>
+											<td>07/08/2017</td>
+											<td>06/12/2017</td>
+											<td>$40</td>
 											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
@@ -321,32 +337,48 @@ $conexion->close();
 					</div>
 				</div>
 			</div>-->
-			<table border="1">
-			<tr>
-				<td>Nombre:</td>
-				<td><?php echo $separar['Nombre']; ?></td>
-				<!-- $id_sesion -->
-			</tr>
-			<tr>
-				<td>Apellido Paterno:</td>
-				<td><?php echo $separar['Apellidopaterno']; ?></td>
-				<!-- $usuario_sesion -->
-			</tr>
-			<tr>
-				<td>Apellido Materno:</td>
-				<td><?php echo $separar['Apellidomaterno']; ?></td>
-				<!-- $contraseña_sesion -->
-			</tr>
-			<tr>
-				<td>Teléfono:</td>
-				<td><?php echo $separar['Telefono']; ?></td>
-				<!-- $contraseña_sesion -->
-			</tr>
-			<tr>
-			<td><a href="editardatcli.php?idproductor=<?php echo $separar['idproductor'];?>" >modificar</a></td>
-			</tr>
-		</table>
-		
+			
+            <form action="regcerticli.php" method="post">
+
+        <h4>Registro Certificadoo</h4>
+        <div class="ub1">Numero de certificado: </div>
+        <input class="controls" type="text" style="width: 250px" name="numero" placeholder="Ingrese Numero " required><br>
+        <div class="ub1">Fecha de vencimiento: </div>
+        <input class="controls" type="text" style="width: 250px" name="vencido" placeholder="Ingrese fecha de vencimiento"><br>
+        <div class="ub1">Empresa certificadora: </div>
+        <input class="controls" type="text" style="width: 250px" name="empresa" placeholder="Ingrese empresa" required><br>
+        <div class="ub1">Alcance del certificado: </div>
+        <input class="controls" type="text" style="width: 250px" name="alcance" placeholder="Alcance" required>
+
+		<br>
+		<br>
+		<input class="botons" type="submit" value="Registrar" name="btnregistrar">
+		<!--</section>-->
+
+		</form>
+<br><br><br><br><br>
+
+		<h3>Editar perfil:</h3>
+		<form class="" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+            <div class="row">
+                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                <input type="text" name="numero" class="form-control"  placeholder=" Ingrese Numero de certificado">
+            </div>
+            <div class="row">
+                <input type="text" name="vencido" class="form-control" placeholder=" Ingrese fecha de vencimiento">
+            </div>
+            <div class="row">
+                <input type="text" name="empresa" class="form-control" placeholder=" Ingrese empresa certificadora">
+            </div>
+            <div class="row">
+                <input type="text" name="alcance" class="form-control" placeholder=" Alcance de productos del certificado">
+            </div>
+            <div class="row">
+                <input type="submit" name="modificar" class="btn btn-success btn-sm btn-block" value="Modificar">
+            </div>
+        </form>
+
+
 		</div>
 	</section>
 
@@ -412,11 +444,11 @@ $conexion->close();
 		    <div class="modal-content">
 			    <div class="modal-header">
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			    	<h4 class="modal-title">Ayuda</h4>
+			    	<h4 class="modal-title">Help</h4>
 			    </div>
 			    <div class="modal-body">
 			        <p>
-			        	En esta ventana muestra!
+			        	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt beatae esse velit ipsa sunt incidunt aut voluptas, nihil reiciendis maiores eaque hic vitae saepe voluptatibus. Ratione veritatis a unde autem!
 			        </p>
 			    </div>
 		      	<div class="modal-footer">

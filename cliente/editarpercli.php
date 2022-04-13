@@ -1,27 +1,40 @@
 <?php
 session_start();
 include '../conexion.php';
+
 $usuario = $_SESSION['usuario'];
 if (!isset($usuario)) {
 	header("Location: ../login.php");
 }
 
-$consulta = "SELECT * FROM usuarios WHERE Usuario = '$usuario'";
-$ejecuta = $conexion->query($consulta);
-$extraer = $ejecuta->fetch_assoc();
-
-$unir = "SELECT u.id, u.Usuario, u.Contraseña, u.id_rol, p.idproductor, p.Nombre, p.Apellidopaterno, p.Apellidomaterno, p.Telefono, p.id_usuario, 
-d.iddireccion, d.Calle, d.Numinter, d.Numext, d.Colonia, d.Ciudad, d.Estado, d.id_productor 
-FROM usuarios u INNER JOIN productor p ON u.id = p.idproductor INNER JOIN direccion d ON p.idproductor = d.id_productor WHERE usuario = '".$usuario."'";
-$verificar = $conexion->query($unir);
-$separar = $verificar->fetch_array();
+$q = "SELECT * FROM usuarios WHERE Usuario = '".$usuario."'";
+	$consulta = $conexion->query($q);
+	$perfil = $consulta->fetch_array();
+	if($perfil > 0){
+		$user = $perfil;
+	}
 	
-$conexion->close();
+//$conexion->close();
+
+	// generar la consulta para extraer lo datos
+	$id = $_GET['id'];
+	$m = "SELECT * FROM usuarios WHERE id = '$id'";
+	$modificar = $conexion->query($m);
+	$row = $modificar->fetch_array(MYSQLI_ASSOC);
+	if(isset($_POST['modificar'])){
+	// recuparar los datos que se encuentran en cada uno de los imputs
+	 $id = $_POST['id'];
+	 $nombre = $conexion->real_escape_string($_POST['usua']);
+	 $apellido1 = $conexion->real_escape_string($_POST['contra']);
+	 // realizar la consulta para modificar los datos
+	 $actuliza = "UPDATE usuarios SET Usuario = '$nombre', Contraseña = '$apellido1' WHERE id = '$id'";
+	 $actualizar = $conexion->query($actuliza);
+	 header("location:usuariocli.php");
+	}
+	$conexion->close();
+
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-	<title>Datos perfil</title>
+	<title>Mi perfil</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/cliente.css">
@@ -29,16 +42,16 @@ $conexion->close();
 	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
-	<!-- SideBar -->
-	<section class="full-box cover dashboard-sideBar">
-		<div class="full-box dashboard-sideBar-bg btn-menu-dashboard"></div>
-		<div class="full-box dashboard-sideBar-ct">
-			<!--SideBar Title -->
-			<div class="full-box text-uppercase text-center text-titles dashboard-sideBar-title">
-				M A Y A B I O <i class="zmdi zmdi-close btn-menu-dashboard visible-xs"></i>
-			</div>
-			<!-- SideBar User info -->
-			<div class="full-box dashboard-sideBar-UserInfo">
+		<!-- SideBar -->
+		<section class="full-box cover dashboard-sideBar">
+			<div class="full-box dashboard-sideBar-bg btn-menu-dashboard"></div>
+			<div class="full-box dashboard-sideBar-ct">
+				<!--SideBar Title -->
+				<div class="full-box text-uppercase text-center text-titles dashboard-sideBar-title">
+					M A Y A B I O <i class="zmdi zmdi-close btn-menu-dashboard visible-xs"></i>
+				</div>
+				<!-- SideBar User info -->
+				<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/personp.png" alt="UserIcon">
 					<figcaption class="text-center text-titles">Bienvenido: <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
@@ -157,39 +170,38 @@ $conexion->close();
 			</ul>
 		</div>
 	</section>
-
-	<!-- Content page-->
-	<section class="full-box dashboard-contentPage">
-		<!-- NavBar -->
-		<nav class="full-box dashboard-Navbar">
-			<ul class="full-box list-unstyled text-right">
-				<li class="pull-left">
-					<a href="#!" class="btn-menu-dashboard"><i class="zmdi zmdi-more-vert"></i></a>
-				</li>
-				<!--<li>
-					<a href="#!" class="btn-Notifications-area">
-						<i class="zmdi zmdi-notifications-none"></i>
-						<span class="badge">7</span>
-					</a>
-				</li>-->
-				<li>
-					<a href="#!" class="btn-search">
-						<i class="zmdi zmdi-search"></i>
-					</a>
-				</li>
-				<li>
-					<a href="#!" class="btn-modal-help">
-						<i class="zmdi zmdi-help-outline"></i>
-					</a>
-				</li>
-			</ul>
-		</nav>
-		<!-- Content page -->
+	
+		<!-- Content page-->
+		<section class="full-box dashboard-contentPage">
+			<!-- NavBar -->
+			<nav class="full-box dashboard-Navbar">
+				<ul class="full-box list-unstyled text-right">
+					<li class="pull-left">
+						<a href="#!" class="btn-menu-dashboard"><i class="zmdi zmdi-more-vert"></i></a>
+					</li>
+					<!--<li>
+						<a href="#!" class="btn-Notifications-area">
+							<i class="zmdi zmdi-notifications-none"></i>
+							<span class="badge">7</span>
+						</a>
+					</li>-->
+					<li>
+						<a href="#!" class="btn-search">
+							<i class="zmdi zmdi-search"></i>
+						</a>
+					</li>
+					<li>
+						<a href="#!" class="btn-modal-help">
+							<i class="zmdi zmdi-help-outline"></i>
+						</a>
+					</li>
+				</ul>
+			</nav>		<!-- Content page -->
 		<div class="container-fluid">
 			<div class="page-header">
-			  <h1 class="text-titles"><img src="../img/shoppingb.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados <small>lista</small></h1>
+			  <h1 class="text-titles"><img src="../img/2.jpg" alt="bir"><!--<i class="zmdi zmdi-male-female zmdi-hc-fw"></i>--> Usuario <small>Perfil</small></h1>
 			</div>
-			<p class="lead">Muestra los datos registrados del productor en el sistema !</p>
+			<p class="lead">Edita los datos del usuario al iniciar sesion en el sistema!</p>
 		</div>
 		<div class="container-fluid">
 			<!--<div class="row">
@@ -205,35 +217,34 @@ $conexion->close();
 									<div class="col-xs-12 col-md-10 col-md-offset-1">
 									    <form action="">
 									    	<div class="form-group label-floating">
-											  <label class="control-label">Payment</label>
+											  <label class="control-label">Name</label>
 											  <input class="form-control" type="text">
 											</div>
 											<div class="form-group label-floating">
-											  <label class="control-label">Amount</label>
+											  <label class="control-label">Last Name</label>
 											  <input class="form-control" type="text">
 											</div>
 											<div class="form-group label-floating">
-											  <label class="control-label">Student Code</label>
+											  <label class="control-label">Address</label>
 											  <textarea class="form-control"></textarea>
 											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Email</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Phone</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Occupation</label>
+											  <input class="form-control" type="text">
+											</div>
 											<div class="form-group">
-										        <label class="control-label">Section</label>
+										        <label class="control-label">Gender</label>
 										        <select class="form-control">
-										          <option>1 grade</option>
-										          <option>2 grade</option>
-										          <option>3 grade</option>
-										          <option>4 grade</option>
-										          <option>5 grade</option>
-										        </select>
-										    </div>
-											<div class="form-group">
-										        <label class="control-label">Year</label>
-										        <select class="form-control">
-										          <option>2017</option>
-										          <option>2016</option>
-										          <option>2015</option>
-										          <option>2014</option>
-										          <option>2013</option>
+										          <option>Male</option>
+										          <option>Female</option>
 										        </select>
 										    </div>
 										    <p class="text-center">
@@ -250,12 +261,13 @@ $conexion->close();
 									<thead>
 										<tr>
 											<th class="text-center">#</th>
-											<th class="text-center">Payment</th>
-											<th class="text-center">Amount</th>
-											<th class="text-center">Pending</th>
-											<th class="text-center">Student</th>
-											<th class="text-center">Section</th>
-											<th class="text-center">Year</th>
+											<th class="text-center">Name</th>
+											<th class="text-center">Last Name</th>
+											<th class="text-center">Address</th>
+											<th class="text-center">Email</th>
+											<th class="text-center">Phone</th>
+											<th class="text-center">Occupation</th>
+											<th class="text-center">Gender</th>
 											<th class="text-center">Update</th>
 											<th class="text-center">Delete</th>
 										</tr>
@@ -263,45 +275,61 @@ $conexion->close();
 									<tbody>
 										<tr>
 											<td>1</td>
-											<td>$70</td>
-											<td>$40</td>
-											<td>$30</td>
-											<td>Carlos Alfaro</td>
-											<td>Section</td>
-											<td>2017</td>
+											<td>Carlos</td>
+											<td>Alfaro</td>
+											<td>El Salvador</td>
+											<td>carlos@gmail.com</td>
+											<td>+50312345678</td>
+											<td>Web Developer</td>
+											<td>Male</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>2</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Claudia Rodriguez</td>
-											<td>Section</td>
-											<td>2017</td>
+											<td>Alicia</td>
+											<td>Melendez</td>
+											<td>El Salvador</td>
+											<td>alicia@gmail.com</td>
+											<td>+50312345678</td>
+											<td>Social Work</td>
+											<td>Female</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>3</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Alicia Melendez</td>
-											<td>Section</td>
-											<td>2017</td>
+											<td>Sarai</td>
+											<td>Mercado</td>
+											<td>El Salvador</td>
+											<td>sarai@gmail.com</td>
+											<td>+50312345678</td>
+											<td>Lawyer</td>
+											<td>Female</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>4</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Alba Bonilla</td>
-											<td>Section</td>
-											<td>2017</td>
+											<td>Alba</td>
+											<td>Bonilla</td>
+											<td>El Salvador</td>
+											<td>alba@gmail.com</td>
+											<td>+50312345678</td>
+											<td>Designer</td>
+											<td>Female</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+										<tr>
+											<td>5</td>
+											<td>Claudia</td>
+											<td>Rodriguez</td>
+											<td>El Salvador</td>
+											<td>claudia@gmail.com</td>
+											<td>+50312345678</td>
+											<td>Lawyer</td>
+											<td>Female</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
@@ -321,32 +349,20 @@ $conexion->close();
 					</div>
 				</div>
 			</div>-->
-			<table border="1">
-			<tr>
-				<td>Nombre:</td>
-				<td><?php echo $separar['Nombre']; ?></td>
-				<!-- $id_sesion -->
-			</tr>
-			<tr>
-				<td>Apellido Paterno:</td>
-				<td><?php echo $separar['Apellidopaterno']; ?></td>
-				<!-- $usuario_sesion -->
-			</tr>
-			<tr>
-				<td>Apellido Materno:</td>
-				<td><?php echo $separar['Apellidomaterno']; ?></td>
-				<!-- $contraseña_sesion -->
-			</tr>
-			<tr>
-				<td>Teléfono:</td>
-				<td><?php echo $separar['Telefono']; ?></td>
-				<!-- $contraseña_sesion -->
-			</tr>
-			<tr>
-			<td><a href="editardatcli.php?idproductor=<?php echo $separar['idproductor'];?>" >modificar</a></td>
-			</tr>
-		</table>
-		
+			<h3>Editar perfil:</h3>
+		<form class="" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+                    <div class="row">
+                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                        <input type="text" name="usua" class="form-control" value="<?php echo $row['Usuario']; ?>">
+                    </div>
+                    <div class="row">
+                        <input type="text" name="contra" class="form-control" value="<?php echo $row['Contraseña']; ?>" >
+                    </div>
+                    <div class="row">
+                        <input type="submit" name="modificar" class="btn btn-success btn-sm btn-block" value="Modificar">
+                    </div>
+        </form>
+
 		</div>
 	</section>
 

@@ -1,13 +1,26 @@
 <?php
 session_start();
+include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
+
+$consulta = "SELECT * FROM usuarios WHERE Usuario = '$usuario'";
+$ejecuta = $conexion->query($consulta);
+$extraer = $ejecuta->fetch_assoc();
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>Subject</title>
+	<title>Productos</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/cliente.css">
+	<link rel="stylesheet" href="../css/main.css">
+	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
 	<!-- SideBar -->
@@ -22,7 +35,7 @@ session_start();
 			<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/personp.png" alt="UserIcon">
-					<figcaption class="text-center text-titles">Admin</figcaption>
+					<figcaption class="text-center text-titles">Bienvenido: <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
 				</figure>
 				<ul class="full-box list-unstyled text-center">
 					<!--<li>
@@ -40,11 +53,11 @@ session_start();
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="inicio.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-- <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -85,11 +98,11 @@ session_start();
 				</li>
 				<li>
 					<a href="#!" class="btn-sideBar-SubMenu"><img src="../img/store.png" alt="bird">
-						<!--<i class="zmdi zmdi-card zmdi-hc-fw"></i>--> Mercados <i class="zmdi zmdi-caret-down pull-right"></i>
+						<!--<i class="zmdi zmdi-card zmdi-hc-fw"></i>--> Productor <i class="zmdi zmdi-caret-down pull-right"></i>
 					</a>
 					<ul class="list-unstyled full-box">
 						<li>
-							<a href="mercadocli.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados</a>
+							<a href="mercadocli.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Productor</a>
 						</li>
 						<!--<li>
 							<a href="payments.html"><i class="zmdi zmdi-money zmdi-hc-fw"></i> Payments</a>
@@ -173,7 +186,7 @@ session_start();
 			<p class="lead">Muestra la lista de productos que contienen los mercados !</p>
 		</div>
 		<div class="container-fluid">
-			<div class="row">
+			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
 					  	<li class="active"><a href="#new" data-toggle="tab">New</a></li>
@@ -269,7 +282,53 @@ session_start();
 					  	</div>
 					</div>
 				</div>
+			</div>-->
+		<form action="">
+		<!--<input class="botons" type="submit" value="Registrar" name="btnregistrar">-->
+		<a href="regisproducli.php">Registrar</a></td>
+		</form>
+
+		<table>	
+				<div id="barrabuscar">
+			<form method="POST">
+			<input type="submit" value="Buscar" name="btnbuscar"><input type="text" name="txtbuscar" id="cajabuscar" placeholder="&#128270;Ingresar nombre de usuario">
+			</form>
 			</div>
+				<tr><th colspan="5"><h1>LISTAR PRODUCTOS</h1><th><a style="font-weight: normal; font-size: 14px;" onclick="abrirform()">Agregar</a></th></tr>
+				<tr>
+				<th>Id</th>
+				<th>Nombre</th>
+				<th>Cantidad KG</th>
+				<th>Precio $</th>
+				<th>Descripcion</th>
+				<!--<th>Acción</th>-->
+				</tr>
+			<?php 
+
+		if(isset($_POST['btnbuscar']))
+		{
+		$buscar = $_POST['txtbuscar'];
+		$queryusuarios = mysqli_query($conexion, "SELECT idproducto,Nombre,Cantidadpro,Precio,Descripcion FROM producto where nom like '".$buscar."%'");
+		}
+		else
+		{
+		$queryusuarios = mysqli_query($conexion, "SELECT * FROM producto ORDER BY idproducto asc");
+		}
+		//$numerofila = 0;
+        while($mostrar = mysqli_fetch_array($queryusuarios)) 
+		{    //$numerofila++;    
+            echo "<tr>";
+			//echo "<td>".$numerofila."</td>";
+			echo "<td>".$mostrar['idproducto']."</td>";
+            echo "<td>".$mostrar['Nombre']."</td>";
+            echo "<td>".$mostrar['Cantidadpro']."</td>";
+            echo "<td>".$mostrar['Precio']."</td>";    
+			echo "<td>".$mostrar['Descripcion']."</td>";  
+            echo "<td style='width:26%'><a href=\"editar.php?idproducto=$mostrar[idproducto]\">Modificar</a> | <a href=\"eliminar.php?cod=$mostrar[idproducto]\" onClick=\"return confirm('¿Estás seguro de eliminar a $mostrar[Nombre]?')\">Eliminar</a></td>";           
+		}
+        ?>
+    	</table>
+
 		</div>
 	</section>
 

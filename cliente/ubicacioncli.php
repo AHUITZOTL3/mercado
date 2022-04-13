@@ -1,13 +1,33 @@
 <?php
 session_start();
+include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
+
+$consulta = "SELECT * FROM usuarios WHERE Usuario = '$usuario'";
+$ejecuta = $conexion->query($consulta);
+$extraer = $ejecuta->fetch_assoc();
+
+$unir = "SELECT u.id, u.Usuario, u.Contraseña, u.id_rol, p.idproductor, p.Nombre, p.Apellidopaterno, p.Apellidomaterno, p.Telefono, p.id_usuario, 
+d.iddireccion, d.Calle, d.Numinter, d.Numext, d.Colonia, d.Ciudad, d.Estado, d.id_productor 
+FROM usuarios u INNER JOIN productor p ON u.id = p.idproductor INNER JOIN direccion d ON p.idproductor = d.id_productor WHERE usuario = '".$usuario."'";
+$verificar = $conexion->query($unir);
+$separar = $verificar->fetch_array();
+	
+$conexion->close();
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>School</title>
+	<title>Mi ubicacion</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/cliente.css">
+	<link rel="stylesheet" href="../css/main.css">
+	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
 	<!-- SideBar -->
@@ -22,7 +42,7 @@ session_start();
 			<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/personp.png" alt="UserIcon">
-					<figcaption class="text-center text-titles">Admin</figcaption>
+					<figcaption class="text-center text-titles">Bienvenido: <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
 				</figure>
 				<ul class="full-box list-unstyled text-center">
 					<!--<li>
@@ -40,11 +60,11 @@ session_start();
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="inicio.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-- <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -85,11 +105,11 @@ session_start();
 				</li>
 				<li>
 					<a href="#!" class="btn-sideBar-SubMenu"><img src="../img/store.png" alt="bird">
-						<!--<i class="zmdi zmdi-card zmdi-hc-fw"></i>--> Mercados <i class="zmdi zmdi-caret-down pull-right"></i>
+						<!--<i class="zmdi zmdi-card zmdi-hc-fw"></i>--> Productor <i class="zmdi zmdi-caret-down pull-right"></i>
 					</a>
 					<ul class="list-unstyled full-box">
 						<li>
-							<a href="mercadocli.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados</a>
+							<a href="mercadocli.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Productor</a>
 						</li>
 						<!--<li>
 							<a href="payments.html"><i class="zmdi zmdi-money zmdi-hc-fw"></i> Payments</a>
@@ -170,10 +190,10 @@ session_start();
 			<div class="page-header">
 			  <h1 class="text-titles"><img src="../img/locations.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Ubicacion <small>Lista</small></h1>
 			</div>
-			<p class="lead">Aqui se muestra los datos de ubicaacion de los mercados registrados!</p>
+			<p class="lead">Aqui se muestra los datos de ubicacion del productor registrados!</p>
 		</div>
 		<div class="container-fluid">
-			<div class="row">
+			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
 					  	<li class="active"><a href="#newSchool" data-toggle="tab"><i class="zmdi zmdi-balance"></i> School Data</a></li>
@@ -441,7 +461,43 @@ session_start();
 					  	</div>
 					</div>
 				</div>
-			</div>
+			</div>-->
+			<table border="1">
+			<tr>
+				<td>Calle:</td>
+				<td><?php echo $separar['Calle']; ?></td>
+				<!-- $id_sesion -->
+			</tr>
+			<tr>
+				<td>Número interior:</td>
+				<td><?php echo $separar['Numinter']; ?></td>
+				<!-- $usuario_sesion -->
+			</tr>
+			<tr>
+				<td>Número exterior:</td>
+				<td><?php echo $separar['Numext']; ?></td>
+				<!-- $contraseña_sesion -->
+			</tr>
+			<tr>
+				<td>Colonia:</td>
+				<td><?php echo $separar['Colonia']; ?></td>
+				<!-- $contraseña_sesion -->
+			</tr>
+			<tr>
+				<td>Ciudad:</td>
+				<td><?php echo $separar['Ciudad']; ?></td>
+				<!-- $contraseña_sesion -->
+			</tr>
+			<tr>
+				<td>Estado:</td>
+				<td><?php echo $separar['Estado']; ?></td>
+				<!-- $contraseña_sesion -->
+			</tr>
+			<tr>
+			<td><a href="editarubipro.php?iddireccion=<?php echo $separar['iddireccion'];?>" >modificar</a></td>
+			</tr>
+		</table>
+
 		</div>
 	</section>
 
