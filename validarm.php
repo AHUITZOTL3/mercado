@@ -1,66 +1,49 @@
 <?php
-//include('conexion.php');
-//$conexion=mysqli_connect("localhost","root","","mercado");
-/*$nombre=$_POST['nombre'];*/
+include('conexion.php');
+require 'conexion.php';
 
+$usu = $_POST['usuario'];
+$cont = $_POST['contraseña'];
 
-/* editarrrlo*/ 
-require_once("conexion.php");
+$nom = $_POST['nombre'];
+/*$pan = $_POST['pancarta'];*/
+$pan = addslashes(file_get_contents($_FILES['pancarta']['tmp_name']));
 
-if(
-    isset($_POST["usuario"]) &&
-    isset($_POST["contraseña"]) &&
+$cal = $_POST['calle'];
+$numi = $_POST['numi'];
+$nume = $_POST['nume'];
+$col = $_POST['colonia'];
+$ciu = $_POST['ciudad'];
+$est = $_POST['estado'];
 
-    isset($_POST["nombre"]) &&
-    isset($_POST["pancarta"]) &&
+$coor = $_POST['coordenas'];
 
-    isset($_POST["calle"]) &&
-    isset($_POST["numi"]) &&
-    isset($_POST["nume"]) &&
-    isset($_POST["colonia"]) &&
-    isset($_POST["ciudad"]) &&
-    isset($_POST["estado"]) &&
+$insertar = "INSERT INTO usuarios (Usuario,Contraseña,id_rol) VALUES ('$usu','$cont','3') ";
 
-    isset($_POST["coordenas"]) 
-){
-    $conexion->query("INSERT INTO ubicacion(Calle,Numint,Numext,Colonia,Ciudad,Estado) VALUES(
-            '".$_POST["calle"]."',
-            '".$_POST["numi"]."',
-            '".$_POST["nume"]."',
-            '".$_POST["colonia"]."',
-            '".$_POST["ciudad"]."',
-            '".$_POST["estado"]."'
-        )
-    ");
+$query = mysqli_query($conexion, $insertar);
+$ultid = mysqli_insert_id($conexion);
 
+$insertar = "INSERT INTO mercadoorganico (Nombremercado,pancarta,id_usuario) VALUES ('$nom','$pan','$ultid') ";
 
-    $conexion->query("INSERT INTO mercadoorganico(Nombremercado,pancarta,id_ubicacion) VALUES(
-        '".$_POST["nombre"]."',
-        '".$_POST["aapellido"]."',
-        '".$_POST["edad"]."',
-        '".$_POST["email"]."',
-        ".$conexion->insert_id."
-        ) 
-    ");
-      
-    $conexion->query("INSERT INTO grafico(Ubicacion, idubicacionn) VALUES(
-        '".$_POST["coordenas"]."',
-        ".$conexion->insert_id."
-        ) 
-    ");
-    
-    $conexion->query("INSERT INTO usuarios(Usuario,Contraseña,id_rol,id_pro,id_mercado,id_certificado) VALUES(
-        '".$_POST["usuario"]."',
-        '".$_POST["contraseña"]."',
-        '3',
-        ".$conexion->insert_id.",
-        ".$conexion->insert_id.",
-        ".$conexion->insert_id."
-        ) 
-    ");
+$query = mysqli_query($conexion, $insertar);
+$ultiid = mysqli_insert_id($conexion);
 
-        header("Location: index.php");
+$insertar = "INSERT INTO ubicacion (Calle,Numint,Numext,Colonia,Ciudad,Estado,id_mercado) VALUES ('$cal','$numi','$nume','$col','$ciu','$est','$ultiid') ";
+$query = mysqli_query($conexion, $insertar);
+
+// && $insertar1 && $insertar2
+if($query){
+
+  echo "<script> alert('correcto');
+   location.href = 'index.php';
+  </script>";
+
+}else{
+   echo "<script> alert('incorrecto');
+   location.href = 'index.php';
+   </script>";
 }
+
 
 
 ?>

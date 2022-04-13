@@ -16,5 +16,5 @@
 		//$_SESSION['ID']= $row['ID'];
 		header('Location: admin/admin.php');
 	}
-?>
 
+?>

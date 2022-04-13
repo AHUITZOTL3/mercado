@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (isset($_SESSION['usuario'])) {
+    //header("Location: admin/home.php");
+    header("Location: mercado/usuariomer.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,27 +20,20 @@
    <form action="validar.php" method="post">
        <h2>BIENVENIDO</h2>
         <h3>CORREO</h3>
-        <!--<h1 class="animate__animated animate__backInLeft">Login</h1>-->
         <input type="text" placeholder="&#128113; Ingrese su correo" name="usuario" required>
         <h3>CONTRASEÑA</h3>       
         <input type="password" placeholder="&#128273; Ingrese su contraseña" name="contraseña" id="contraseña" class="cajaentradatexto" required>
-        <!--<input type="password" name="txtpassword" id="txtpassword" class="cajaentradatexto">-->
         <div class="ub1">
         <input type="checkbox" onclick="verpassword()" >Mostrar contraseña
         </div>
         <br>
         <input type="submit" value="Ingresar">
         <br>
-        <!--<div id="error" class="">
-            capture usuario y contraseña
-        </div>-->
-
-   <br>
-   <div id="reg">
-   <b><a href="index.php" style="float:left">Regresar</a></b>
-   <b><a href="loginadmi.php" style="float:right">Administrador</a></b>
-   </div>
-   
+        <br>
+        <div id="reg">
+        <b><a href="index.php" style="float:left">Regresar</a></b>
+        <b><a href="loginadmi.php" style="float:right">Administrador</a></b>
+        </div>
    </form> 
 </body>
 

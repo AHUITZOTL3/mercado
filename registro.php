@@ -12,7 +12,7 @@
 </head>
 <body>
   <form action="validarre.php" method="post">
-    <h4>REGISTRO</h4>
+    <!--<h4>REGISTRO</h4>
     <input class="controls" type="text" name="usuario" placeholder="Ingrese correo" required>
     <input class="controls" type="password" name="contraseña" id="correo" placeholder="Ingrese su Contraseña" required>
     <div class="ub1">Rol: </div>
@@ -22,7 +22,7 @@
       <option value="2">Productor</option>
       <option value="3">Mercado</option>
     </select>
-    </td>
+    </td>-->
 
     <!--
       <input class="controls" type="text" name="usuario" placeholder="Ingrese nombre" required>
@@ -38,11 +38,35 @@
       <input class="controls" type="text" name="usuario" placeholder="Ingrese estado" required>
       <input class="controls" type="text" name="usuario" placeholder="Ingrese coordenadas" required>
     -->
+    <!--<p>Estoy de acuerdo con <a href="#">Terminos y Condiciones</a></p>--
+    <input class="botons" type="submit" value="Registrar" name="btnregistrar">
+    <p><a href="login.php">¿Ya tengo Cuenta?</a></p>
+    <p><a href="index.php">REGRESAR</a></p>-->
+  <!--</section>-->
+
+  <h4>REGISTRO</h4>
+    <input class="controls" type="text" name="correo" placeholder="Ingrese correo" required>
+    <input class="controls" type="password" name="contraseña" id="correo" placeholder="Ingrese su Contraseña" required>
+    <div class="ub1">Datos personales: </div>
+    <input class="controls" type="text" name="nombre" placeholder="Ingrese Nombre" required>
+    <input class="controls" type="text" name="apellidop" placeholder="Ingrese Apellido paterno">
+    <input class="controls" type="text" name="apellidom" placeholder="Ingrese Apellido Materno" required>
+    <input class="controls" type="text" name="telefono" placeholder="Ingrese Telefono" required>
+    <div class="ub1">Domicilio: </div>
+    <input class="controls" type="text" name="calle" placeholder="Ingrese calle " required>
+    <input class="controls" type="text" name="numi" placeholder="Ingrese num int" required>
+    <input class="controls" type="text" name="nume" placeholder="Ingrese num ext" required>
+    <input class="controls" type="text" name="colonia" placeholder="Ingrese colonia" required>
+    <input class="controls" type="text" name="ciudad" placeholder="Ingrese ciudad" required>
+    <input class="controls" type="text" name="estado" placeholder="Ingrese estado" required>
+    <input class="controls" type="text" name="coordenas" placeholder="Ingrese coordenadas" required>
+    
     <!--<p>Estoy de acuerdo con <a href="#">Terminos y Condiciones</a></p>-->
     <input class="botons" type="submit" value="Registrar" name="btnregistrar">
     <p><a href="login.php">¿Ya tengo Cuenta?</a></p>
     <p><a href="index.php">REGRESAR</a></p>
   <!--</section>-->
+
   </form>
 
 </body>
