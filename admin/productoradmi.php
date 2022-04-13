@@ -1,100 +1,24 @@
 <?php
 session_start();
-include "../funciones.php";
-//include "admin.php";
-//include_once("../conexion.php");
 include '../conexion.php';
 
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
 
-	/*if (!isset($_GET['ID'])) {
-		header('Location: admin.php');
-	}*/
-	/*if (!isset($_SESSION['ID'])) {
-		header('Location:../loginadmi.php');
-	}
-	$iduser=$_SESSION['ID'];
-	$sql="SELECT * FROM administrador WHERE ID = $iduser ";
-	$resultado=$conexion->query($sql);
-	$row=$resultado->fetch_array();*/
-	//if($row > 0){
-	//	$user = $row;
-	//}
-	
-	//elseif(isset($_SESSION['usuario'])){
-       /* include '../conexiona.php';
-		$id = $_GET['ID'];
-
-		$sentencia = $bd->prepare("SELECT * FROM administrador WHERE ID = ?;");
-		$sentencia->execute([$id]);
-		$persona = $sentencia->fetch(PDO::FETCH_OBJ);*/
-		//print_r($alumnos);
-	/*}else{
-		echo "Error en el sistema";
-	}*/
-
-
-	/*session_start();
-	include 'includes/conecta.php';*/
-	$usuario = $_SESSION['usuario'];
-	if (!isset($usuario)) {
-	  header("location:../loginadmi.php");
-	}
-
-	$q = "SELECT * FROM administrador WHERE usuario = '".$usuario."'";
-	$consulta = $conexion->query($q);
-	$perfil = $consulta->fetch_array();
-	if($perfil > 0){
-		$user = $perfil;
-	}
-
-	// generar la consulta para extraer lo datos
-	$id = $_GET['ID'];
-	$m = "SELECT * FROM administrador WHERE ID = '$id'";
-	$modificar = $conexion->query($m);
-	$row = $modificar->fetch_array(MYSQLI_ASSOC);
-	if(isset($_POST['modificar'])){
-	// recuparar los datos que se encuentran en cada uno de los imputs
-	 $id = $_POST['id'];
-	 $nombre = $conexion->real_escape_string($_POST['usua']);
-	 $apellido1 = $conexion->real_escape_string($_POST['contra']);
-	 /*$apellido2 = $conecta->real_escape_string($_POST['mAppelidoM']);
-	 $tel = $conecta->real_escape_string($_POST['mTelefono']);*/
-	 // realizar la consulta para modificar los datos
-	 $actuliza = "UPDATE administrador SET usuario = '$nombre', contraseña = '$apellido1' WHERE ID = '$id'";
-	 $actualizar = $conexion->query($actuliza);
-	 header("location:admin.php");
-	}
-	$conexion->close();
 
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>Admin</title>
+	<title>Registration</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/main.css">
 	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
-	<?php
-	/*if(isset($_GET['usuario'])){
-		$query = mysql_query($conexion, "SELECT * FROM administrador WHERE usuario = '".$_GET['usuario']."'");
-
-		while($row=mysql_fetch_array($query)){*/
-	
-			/*$codigo = $_GET['ID'];
- 
-			$querybuscar = mysqli_query($conexion, "SELECT * FROM administrador WHERE ID=$codigo");
-			 
-			while($mostrar = mysqli_fetch_array($querybuscar))
-			{
-				$codigo = $mostrar['ID'];
-				$usuario = $mostrar['usuario'];
-				$contraseña = $mostrar['contraseña'];
-				/*$telefono = $mostrar['tel'];*
-			}*/
-	?>
 	<!-- SideBar -->
 	<section class="full-box cover dashboard-sideBar">
 		<div class="full-box dashboard-sideBar-bg btn-menu-dashboard"></div>
@@ -189,7 +113,7 @@ include '../conexion.php';
 						<li>
 							<a href="ubicacionadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Ubicacion</a>
 						</li>
-						<li>
+                        <li>
 							<a href="direccionproadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Direccion productor</a>
 						</li>
 					</ul>
@@ -256,105 +180,234 @@ include '../conexion.php';
 		<!-- Content page -->
 		<div class="container-fluid">
 			<div class="page-header">
-			  <h1 class="text-titles"><img src="../img/2.jpg" alt="bir"><!--<i class="zmdi zmdi-account zmdi-hc-fw"></i>--> Admin <small>Administrador</small></h1>
+			  <h1 class="text-titles"><img src="../img/shoppingb.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Productores <small>lista</small></h1>
 			</div>
-			<p class="lead">Primero edita los datos y despues da click en modificar!</p>
+			<p class="lead">Muestra los datos sobre los productores registrados en el sistema !</p>
 		</div>
 		<div class="container-fluid">
+			<!--<div class="row">
+				<div class="col-xs-12">
+					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
+					  	<li class="active"><a href="#new" data-toggle="tab">New</a></li>
+					  	<li><a href="#list" data-toggle="tab">List</a></li>
+					</ul>
+					<div id="myTabContent" class="tab-content">
+						<div class="tab-pane fade active in" id="new">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-md-10 col-md-offset-1">
+									    <form action="">
+									    	<div class="form-group label-floating">
+											  <label class="control-label">Payment</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Amount</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Student Code</label>
+											  <textarea class="form-control"></textarea>
+											</div>
+											<div class="form-group">
+										        <label class="control-label">Section</label>
+										        <select class="form-control">
+										          <option>1 grade</option>
+										          <option>2 grade</option>
+										          <option>3 grade</option>
+										          <option>4 grade</option>
+										          <option>5 grade</option>
+										        </select>
+										    </div>
+											<div class="form-group">
+										        <label class="control-label">Year</label>
+										        <select class="form-control">
+										          <option>2017</option>
+										          <option>2016</option>
+										          <option>2015</option>
+										          <option>2014</option>
+										          <option>2013</option>
+										        </select>
+										    </div>
+										    <p class="text-center">
+										    	<button href="#!" class="btn btn-info btn-raised btn-sm"><i class="zmdi zmdi-floppy"></i> Save</button>
+										    </p>
+									    </form>
+									</div>
+								</div>
+							</div>
+						</div>
+					  	<div class="tab-pane fade" id="list">
+							<div class="table-responsive">
+								<table class="table table-hover text-center">
+									<thead>
+										<tr>
+											<th class="text-center">#</th>
+											<th class="text-center">Payment</th>
+											<th class="text-center">Amount</th>
+											<th class="text-center">Pending</th>
+											<th class="text-center">Student</th>
+											<th class="text-center">Section</th>
+											<th class="text-center">Year</th>
+											<th class="text-center">Update</th>
+											<th class="text-center">Delete</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>$70</td>
+											<td>$40</td>
+											<td>$30</td>
+											<td>Carlos Alfaro</td>
+											<td>Section</td>
+											<td>2017</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>$70</td>
+											<td>$70</td>
+											<td>$0</td>
+											<td>Claudia Rodriguez</td>
+											<td>Section</td>
+											<td>2017</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>$70</td>
+											<td>$70</td>
+											<td>$0</td>
+											<td>Alicia Melendez</td>
+											<td>Section</td>
+											<td>2017</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>$70</td>
+											<td>$70</td>
+											<td>$0</td>
+											<td>Alba Bonilla</td>
+											<td>Section</td>
+											<td>2017</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+									</tbody>
+								</table>
+								<ul class="pagination pagination-sm">
+								  	<li class="disabled"><a href="#!">«</a></li>
+								  	<li class="active"><a href="#!">1</a></li>
+								  	<li><a href="#!">2</a></li>
+								  	<li><a href="#!">3</a></li>
+								  	<li><a href="#!">4</a></li>
+								  	<li><a href="#!">5</a></li>
+								  	<li><a href="#!">»</a></li>
+								</ul>
+							</div>
+					  	</div>
+					</div>
+				</div>
+			</div>-->
 
-		<h3>Editar perfil:</h3>
-		<form class="" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-                    <div class="row">
-                        <input type="hidden" name="id" value="<?php echo $row['ID']; ?>">
-                        <input type="text" name="usua" class="form-control" value="<?php echo $row['usuario']; ?>">
-                    </div>
-                    <div class="row">
-                        <input type="text" name="contra" class="form-control" value="<?php echo $row['contraseña']; ?>" >
-                    </div>
-                    <!--<div class="row">
-                        <input type="text" name="mAppelidoM" class="form-control" value="<?php /*echo $dato['ApellidoM'];*/ ?>" placeholder="Apellido Materno" required>
-                    </div>
-                    <div class="row">
-                        <input type="text" name="mTelefono" class="form-control" value="<?php /*echo $dato['Telefono']; */?>" placeholder="Telefono" required>
-                    </div>-->
-                    <div class="row">
-                        <input type="submit" name="modificar" class="btn btn-success btn-sm btn-block" value="Modificar">
-                    </div>
-                 </form>
+			<!--<table>	
+				<div id="barrabuscar">
+			<form method="POST">
+			<input type="submit" value="Buscar" name="btnbuscar"><input type="text" name="txtbuscar" id="cajabuscar" placeholder="&#128270;Ingresar nombre de usuario">
+			</form>-->
+			</div>
+				<!--<tr><th colspan="5"><h1>LISTAR USUARIOS</h1><th><a style="font-weight: normal; font-size: 14px;" onclick="abrirform()">Agregar</a></th></tr>
+				<tr>
+				<th>Id</th>
+				<th>Nombre</th>
+				<th>Cantidad</th>
+				<th>Precio</th>
+				<th>Descripcion</th>
+				<!--<th>Acción</th>--
+				</tr>-->
+			<?php 
 
-        <!--<h3>Editar perfil:</h3>
-                <!--<form action="editaradmp.php" method="POST" enctype="multipart/form-data" name="form1" id="form1">--
-				<form action="<?php $_SERVER["PHP_SELF"];?>" method="post" enctype="multipart/form-data" name="form1" id="form1">
-                    <table>
-                        <tr>
-                            <td>Usuario: </td>
-                            <td><input type="text" name="txt2Usu" value="<?php echo $row['usuario']; ?>"></td>
-                        </tr>
-                        <tr>
-                            <td>Contraseña: </td>
-                            <td><input type="text" name="txt2Contra" value="<?php echo $row['contraseña']; ?>"></td>
-                        </tr>
-                        
-                        <tr>
-                            <td colspan="2"><input type="submit" name="modificar" id="button" value="EDITAR"></td>
-                        </tr>
-                    </table>
-                </form>-->
+		/*if(isset($_POST['btnbuscar']))
+		{
+		$buscar = $_POST['txtbuscar'];
+		$queryusuarios = mysqli_query($conexion, "SELECT idcertificacion,Numcert,Fechaven,Certificadoraem FROM mercadoorganico where nom like '".$buscar."%'");
+		}
+		else
+		{
+		$queryusuarios = mysqli_query($conexion, "SELECT * FROM mercadoorganico ORDER BY idmercado asc");
+		}
+		//$numerofila = 0;
+        while($mostrar = mysqli_fetch_array($queryusuarios)) 
+		{    //$numerofila++;    
+            echo "<tr>";
+			//echo "<td>".$numerofila."</td>";
+			echo "<td>".$mostrar['idmercado']."</td>";
+            echo "<td>".$mostrar['Nombremercado']."</td>";
+			/*echo "<td>"<img height="200px" src="data:image/jpeg;base64, <?php echo base64_encode($separar['pancarta']); ?>"/> "</td>"*
+            echo "<td>".$mostrar['pancarta']."</td>";
+            //echo "<td>".$mostrar['Certificadoraem']."</td>";    
+			//echo "<td>".$mostrar['Alcance']."</td>";  
+            echo "<td style='width:26%'><a href=\"editar.php?idmercado=$mostrar[idmercado]\">Modificar</a> | <a href=\"eliminar.php?cod=$mostrar[idmercado]\" onClick=\"return confirm('¿Estás seguro de eliminar a $mostrar[Nombremercado]?')\">Eliminar</a></td>";           
+		}*/
+        ?>
+    	</table>
 
-				<?php
-				if(isset($_POST['editar'])){
-					$codigo1 = $_POST[''];
-					$usuario1 = $_POST['txt2Usu'];
-					$contraseña1 = $_POST['txt2Contra'];
-					$querymodificar = mysqli_query($conexion, "UPDATE administrador SET usuario='$codigo1', contraseña='$contraseña1' WHERE ID=$codigo1");
+		<?php
+		/*include("../conexion.php");
+		$id=$_REQUEST['idmercado'];
 
-					echo "<script>window.location= 'admin.php' </script>";
-				}
-
-				/*if(isset($_POST['editar'])){
-					$usuario = clean($_POST['usuario']);
-					$contrasena = clean($_POST['contraseña']);
-					if($_POST['contraseña'] != '') { $contrasena = $_POst['contraseña'];} else { $contrasena = $row['contraseña']; }
-
-					$sql = mysqli_query($conexion, "UPDATE administrador SET usuario = '".$usuario."', contraseña = '".$contrasena."' WHERE ID = '".$_GET['ID']."'");
-
-					if($sql){echo "Se han actualizado los datos";}*/
-				?>
-
-            <!--<center>
-                <h3>Editar alumno:</h3>
-                <form method="POST" action="editaradmp.php">
-                    <table>
-                        <tr>
-                            <td>Usuario: </td>
-                            <td><input type="text" name="txt2Usu" value="<?php echo $persona->usuario; ?>"></td>
-                        </tr>
-                        <tr>
-                            <td>Contraseña: </td>
-                            <td><input type="text" name="txt2Contra" value="<?php echo $persona->contraseña; ?>"></td>
-                        </tr>
-                        <!--<tr>
-                            <td>Nombre: </td>
-                            <td><input type="text" name="txt2Nombre" value="<?php echo $persona->nombre; ?>"></td>
-                        </tr>
-                        <tr>
-                            <td>Examen parcial: </td>
-                            <td><input type="text" name="txt2Parcial" value="<?php echo $persona->ex_parcial; ?>"></td>
-                        </tr>
-                        <tr>
-                            <td>Examen final: </td>
-                            <td><input type="text" name="txt2Final" value="<?php echo $persona->ex_final; ?>"></td>
-                        </tr>--
-                        <tr>
-                            <input type="hidden" name="oculto">
-                            <input type="hidden" name="id2" value="<?php echo $persona->ID; ?>">
-                            <input type="hidden" name="idrol2" value="<?php echo $persona->id_rol; ?>">
-                            <td colspan="2"><input type="submit" value="EDITAR"></td>
-                        </tr>
-                    </table>
-                </form>
-            </center>-->
-
+		$query="SELECT * FROM mercadoorganico WHERE idmercado='$id";
+		$resultado = $conexion->query($query);
+		$row = $resultado->fetch_assoc();*/
+		?>
+		<center>
+			
+		
+		<table width="1000" height="360" border="1"bgcolor="FFFFF">
+			<thead>
+				<!--<tr height="40" >
+					<th colspan="5" >nuevo</th>
+				</tr>-->
+				<tr height="60">
+					<th width="80" >Id</th>
+					<th width="80">Nombre</th>
+					<th width="80">Apellido paterno</th>
+                    <th width="80">Apellido materno</th>
+                    <th width="80">Telefono</th>
+					<th width="80" colspan="2">operacion</th>
+				</tr>
+			</thead>
+			<tbody>
+		<?php
+		include("../conexion.php");
+		$query= "SELECT * FROM productor";
+		$resultado = $conexion->query($query);
+		while($row= $resultado->fetch_assoc()){
+		?>
+		<tr>
+			<td width="260"><center><?php echo $row['idproductor']; ?></center></td>
+			<td width="400"><center><?php echo $row['Nombre']; ?></center></td>
+            <td width="400"><center><?php echo $row['Apellidopaterno']; ?></center></td>
+            <td width="400"><center><?php echo $row['Apellidomaterno']; ?></center></td>
+            <td width="400"><center><?php echo $row['Telefono']; ?></center></td>
+			<!--<td><center><img height="200px" src="data:image/jpeg;base64,<?php echo base64_encode($row['pancarta']); ?>"/></center></td>
+			--<th width="420" ><a href="modificar.php?idmercado=<?php echo $row['idmercado']; ?>">modificar</a></th>
+			<th width="420" ><a href="eliminar.php?idmercado=<?php echo $row['idmercado']; ?>">eliminar</a></th>-->
+			<td width="380" ><a href="modificar.php?idmercado=<?php echo $row['idproductor']; ?>">modificar</a></td>
+			<!--<td width="380" ><a href="eliminar.php?idmercado=<?php echo $row['idproductor']; ?>">eliminar</a></td>-->
+		</tr>
+		<?php
+		}
+		?>
+		</tbody>
+		</table>
+		</center>		
+			
 		</div>
 	</section>
 
@@ -424,7 +477,7 @@ include '../conexion.php';
 			    </div>
 			    <div class="modal-body">
 			        <p>
-			        	Aqui muestra !
+			        	En esta ventana muestra!
 			        </p>
 			    </div>
 		      	<div class="modal-footer">
@@ -433,10 +486,6 @@ include '../conexion.php';
 		    </div>
 	  	</div>
 	</div>
-	<?php
-			//}
-	//}
-	?>
 	<!--====== Scripts -->
 	<script src="../js/jquery-3.1.1.min.js"></script>
 	<script src="../js/sweetalert2.min.js"></script>

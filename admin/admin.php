@@ -1,5 +1,5 @@
 <?php
-session_start();
+/*session_start();
 //include '../conexiona.php';
 include_once("../conexion.php"); 
 
@@ -20,7 +20,7 @@ include_once("../conexion.php");
 
 	}else{
 		echo "Error en el sistema";
-	}
+	}*/
 	//ini_set('error_reporting',0);
 
 	/*if(!isset($_SESSION['id'])){
@@ -31,22 +31,27 @@ include_once("../conexion.php");
 	$sql="SELECT u id, a usuario FROM administrador"*/
 
 	////
-	/*session_start();
+	session_start();
 	include '../conexion.php';
-	 
+	//$consul = "SELECT * FROM administrador ";
+	//$guardar = $conexion->query($consul);
 	$usuario = $_SESSION['usuario'];
 	if (!isset($usuario)) {
 		header("Location: ../loginadmi.php");
 	}
 
-	$consulta = "SELECT * FROM usuarios WHERE usuario = '$usuario";
-	$ejecuta = $conecta->query($consulta);
-	$extraer = $ejecuta->fetch_assoc();
+	$q = "SELECT * FROM administrador WHERE usuario = '".$usuario."'";
+	$consulta = $conexion->query($q);
+	$perfil = $consulta->fetch_array();
+	if($perfil > 0){
+		$user = $perfil;
+	}
+	$conexion->close();
+	
+	//$unir = "SELECT u.ID, u.usuario, u.contraseña, id_rol";
+	//$verificar = $conecta->query($unir);
+	//$separar = $verificar->fech_array();*/
 
-	$unir = "SELECT u.ID, u.usuario, u.contraseña, id_rol";
-	$verificar = $conecta->query($unir);
-	$separar = $verificar->fech_array();*/
-//
 
 ?>
 <!DOCTYPE html>
@@ -106,11 +111,11 @@ include_once("../conexion.php");
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="home.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-> <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -157,9 +162,9 @@ include_once("../conexion.php");
 						<li>
 							<a href="mercadoadmi.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados</a>
 						</li>
-						<!--<li>
-							<a href="payments.html"><i class="zmdi zmdi-money zmdi-hc-fw"></i> Payments</a>
-						</li>-->
+						<li>
+							<a href="productoradmi.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money zmdi-hc-fw">--></i> Productores</a>
+						</li>
 					</ul>
 				</li>
 				<li>
@@ -169,6 +174,9 @@ include_once("../conexion.php");
 					<ul class="list-unstyled full-box">
 						<li>
 							<a href="ubicacionadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Ubicacion</a>
+						</li>
+						<li>
+							<a href="direccionproadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Direccion productor</a>
 						</li>
 					</ul>
 				</li>
@@ -236,7 +244,7 @@ include_once("../conexion.php");
 			<div class="page-header">
 			  <h1 class="text-titles"><img src="../img/2.jpg" alt="bir"><!--<i class="zmdi zmdi-account zmdi-hc-fw"></i>--> Admin <small>Administrador</small></h1>
 			</div>
-			<p class="lead">Aqui puede editar su perfil y revisar los demas administradores del sistema!</p>
+			<p class="lead">Aqui puede editar su perfil!</p>
 		</div>
 		<div class="container-fluid">
 			<!--<div class="row">
@@ -366,19 +374,19 @@ include_once("../conexion.php");
 		<form method="POST">
 		<input type="submit" value="Buscar" name="btnbuscar"><input type="text" name="txtbuscar" id="cajabuscar" placeholder="&#128270;Ingresar nombre de usuario">
 		</form>-->
-		</div>
+	<!--	</div>
 			<tr><th colspan="5"><h1>USUARIO</h1></tr>
 			<tr>
 		    <th>Id</th>
 			<th>usuario</th>
             <th>contraseña</th>
             <th>id_rol</th>
-            <!--<th>Teléfono</th>-->
+            <!--<th>Teléfono</th>--
             <th>Acción</th>
-			</tr>
+			</tr>-->
         <?php 
 
-
+/*
 		//foreach ($extraer as $dato) {
 			?>
 			<!--<tr>
@@ -399,7 +407,7 @@ include_once("../conexion.php");
 
 
 
-		$queryusuarios = mysqli_query($conexion, "SELECT * FROM administrador ORDER BY usuario asc");
+		$queryusuarios = mysqli_query($conexion, "SELECT * FROM administrador ORDER BY ID asc");
 
 		//$numerofila = 0;
         while($mostrar = mysqli_fetch_array($queryusuarios)) 
@@ -412,7 +420,7 @@ include_once("../conexion.php");
 			echo "<td>".$mostrar['id_rol']."</td>";
 			  
             echo "<td style='width:26%'><a href=\"editaradf.php?usuario=$mostrar[usuario]\">Modificar</a></td>";           
-		}
+		}*/
         ?>
     </table>
 	<script>
@@ -428,22 +436,27 @@ include_once("../conexion.php");
 	</script>
 
 		<table border="1">
+			<!-- -->
+
 			<tr>
 				<td>Id:</td>
-				<td><?php echo $id_sesion; ?></td>
+				<td><?php echo $user['ID']; ?></td>
+				<!-- $id_sesion -->
 			</tr>
 			<tr>
 				<td>usuario</td>
-				<td><?php echo $usuario_sesion; ?></td>
+				<td><?php echo $user['usuario']; ?></td>
+				<!-- $usuario_sesion -->
 			</tr>
 			<tr>
 				<td>contraseña</td>
-				<td><?php echo $contraseña_sesion; ?></td>
+				<td><?php echo $user['contraseña']; ?></td>
+				<!-- $contraseña_sesion -->
 			</tr>
 			<tr>
-			<a href="editaradf.php?ID=<?php echo $row->ID;?>">modificar</a>
-			<td><a href="editaradf.php?id=<?php echo $row['id']; ?>">modificar</a></td>
+			<td><a href="editaradf.php?ID=<?php echo $user['ID'];?>" >modificar</a></td>
 			</tr>
+		
 		</table>
 
 

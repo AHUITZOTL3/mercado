@@ -1,5 +1,11 @@
 <?php
 session_start();
+include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -22,7 +28,7 @@ session_start();
 			<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/adminp.png" alt="UserIcon">
-					<figcaption class="text-center text-titles">Admin</figcaption>
+					<figcaption class="text-center text-titles">bienvenido <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
 				</figure>
 				<ul class="full-box list-unstyled text-center">
 					<!--<li>
@@ -40,11 +46,11 @@ session_start();
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="home.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-- <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -91,9 +97,9 @@ session_start();
 						<li>
 							<a href="mercadoadmi.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados</a>
 						</li>
-						<!--<li>
-							<a href="payments.html"><i class="zmdi zmdi-money zmdi-hc-fw"></i> Payments</a>
-						</li>-->
+						<li>
+							<a href="productoradmi.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money zmdi-hc-fw">--></i> Productores</a>
+						</li>
 					</ul>
 				</li>
 				<li>
@@ -103,6 +109,9 @@ session_start();
 					<ul class="list-unstyled full-box">
 						<li>
 							<a href="ubicacionadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Ubicacion</a>
+						</li>
+						<li>
+							<a href="direccionproadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Direccion productor</a>
 						</li>
 					</ul>
 				</li>
@@ -170,10 +179,10 @@ session_start();
 			<div class="page-header">
 			  <h1 class="text-titles"><img src="../img/locations.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Ubicacion <small>Lista</small></h1>
 			</div>
-			<p class="lead">Aqui se muestra los datos de ubicaacion de los mercados registrados!</p>
+			<p class="lead">Aqui se muestra los datos de ubicacion de los mercados registrados!</p>
 		</div>
 		<div class="container-fluid">
-			<div class="row">
+			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
 					  	<li class="active"><a href="#newSchool" data-toggle="tab"><i class="zmdi zmdi-balance"></i> School Data</a></li>
@@ -441,7 +450,56 @@ session_start();
 					  	</div>
 					</div>
 				</div>
-			</div>
+			</div>-->
+
+			<center>
+			
+		
+		<table width="1000" height="360" border="1"bgcolor="FFFFF">
+			<thead>
+				<!--<tr height="40" >
+					<th colspan="5" >nuevo</th>
+				</tr>-->
+				<tr height="60">
+					<th width="80" >Id</th>
+					<th width="80">Calle</th>
+					<th width="80">Numero interior</th>
+					<th width="80">Numero exterior</th>
+					<th width="80">Colonia</th>
+					<th width="80">Ciudad</th>
+					<th width="80">Estado</th>
+					<th width="80">operaciones</th>
+				</tr>
+			</thead>
+			<tbody>
+		<?php
+		include("../conexion.php");
+		$query= "SELECT * FROM ubicacion";
+		$resultado = $conexion->query($query);
+		while($row= $resultado->fetch_assoc()){
+		?>
+		<tr>
+			<td width="260"><center><?php echo $row['idubicacion']; ?></center></td>
+			<td width="400"><center><?php echo $row['Calle']; ?></center></td>
+			<td width="260"><center><?php echo $row['Numint']; ?></center></td>
+			<td width="260"><center><?php echo $row['Numext']; ?></center></td>
+			<td width="260"><center><?php echo $row['Colonia']; ?></center></td>
+			<td width="260"><center><?php echo $row['Ciudad']; ?></center></td>
+			<td width="260"><center><?php echo $row['Estado']; ?></center></td>
+			<!--<td><center><img height="200px" src="data:image/jpeg;base64,<?php echo base64_encode($row['pancarta']); ?>"/></center></td>
+			--<th width="420" ><a href="modificar.php?idmercado=<?php echo $row['idmercado']; ?>">modificar</a></th>
+			<th width="420" ><a href="eliminar.php?idmercado=<?php echo $row['idmercado']; ?>">eliminar</a></th>-->
+			<td width="380" ><a href="modificar.php?idmercado=<?php echo $row['idubicacion']; ?>">modificar</a></td>
+			<!--<td width="380" ><a href="eliminar.php?idmercado=<?php echo $row['idubicacion']; ?>">eliminar</a></td>-->
+		</tr>
+		<?php
+		}
+		?>
+		</tbody>
+		</table>
+		</center>	
+
+
 		</div>
 	</section>
 

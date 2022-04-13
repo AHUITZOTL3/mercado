@@ -1,10 +1,20 @@
 <?php
 session_start();
+include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
+
+
+
 ?>
 	<title>Representative</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/main.css">
+	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
 		<!-- SideBar -->
@@ -19,7 +29,7 @@ session_start();
 				<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/adminp.png" alt="UserIcon">
-					<figcaption class="text-center text-titles">Admin</figcaption>
+					<figcaption class="text-center text-titles">bienvenido <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
 				</figure>
 				<ul class="full-box list-unstyled text-center">
 					<!--<li>
@@ -37,11 +47,11 @@ session_start();
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="home.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-- <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -88,9 +98,9 @@ session_start();
 						<li>
 							<a href="mercadoadmi.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados</a>
 						</li>
-						<!--<li>
-							<a href="payments.html"><i class="zmdi zmdi-money zmdi-hc-fw"></i> Payments</a>
-						</li>-->
+						<li>
+							<a href="productoradmi.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money zmdi-hc-fw">--></i> Productores</a>
+						</li>
 					</ul>
 				</li>
 				<li>
@@ -100,6 +110,9 @@ session_start();
 					<ul class="list-unstyled full-box">
 						<li>
 							<a href="ubicacionadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Ubicacion</a>
+						</li>
+						<li>
+							<a href="direccionproadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Direccion productor</a>
 						</li>
 					</ul>
 				</li>
@@ -169,7 +182,7 @@ session_start();
 			<p class="lead">En esta parte puedes agregar y editar a los certificados que contiene el sistema!</p>
 		</div>
 		<div class="container-fluid">
-			<div class="row">
+			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
 					  	<li class="active"><a href="#new" data-toggle="tab">New</a></li>
@@ -313,7 +326,49 @@ session_start();
 					  	</div>
 					</div>
 				</div>
+			</div>-->
+
+			<table>	
+				<div id="barrabuscar">
+			<form method="POST">
+			<input type="submit" value="Buscar" name="btnbuscar"><input type="text" name="txtbuscar" id="cajabuscar" placeholder="&#128270;Ingresar nombre de usuario">
+			</form>
 			</div>
+				<tr><th colspan="5"><h1>LISTAR USUARIOS</h1><th><a style="font-weight: normal; font-size: 14px;" onclick="abrirform()">Agregar</a></th></tr>
+				<tr>
+				<th>Id</th>
+				<th>Nombre</th>
+				<th>Cantidad</th>
+				<th>Precio</th>
+				<th>Descripcion</th>
+				<!--<th>Acción</th>-->
+				</tr>
+			<?php 
+
+		if(isset($_POST['btnbuscar']))
+		{
+		$buscar = $_POST['txtbuscar'];
+		$queryusuarios = mysqli_query($conexion, "SELECT idcertificacion,Numcert,Fechaven,Certificadoraem FROM certificacion where nom like '".$buscar."%'");
+		}
+		else
+		{
+		$queryusuarios = mysqli_query($conexion, "SELECT * FROM certificacion ORDER BY idcertificacion asc");
+		}
+		//$numerofila = 0;
+        while($mostrar = mysqli_fetch_array($queryusuarios)) 
+		{    //$numerofila++;    
+            echo "<tr>";
+			//echo "<td>".$numerofila."</td>";
+			echo "<td>".$mostrar['idcertificacion']."</td>";
+            echo "<td>".$mostrar['Numcert']."</td>";
+            echo "<td>".$mostrar['Fechaven']."</td>";
+            echo "<td>".$mostrar['Certificadoraem']."</td>";    
+			echo "<td>".$mostrar['Alcance']."</td>";  
+            echo "<td style='width:26%'><a href=\"editar.php?idcertificacion=$mostrar[idcertificacion]\">Modificar</a> | <a href=\"eliminar.php?cod=$mostrar[idcertificacion]\" onClick=\"return confirm('¿Estás seguro de eliminar a $mostrar[Numcert]?')\">Eliminar</a></td>";           
+		}
+        ?>
+    	</table>
+
 		</div>
 	</section>
 

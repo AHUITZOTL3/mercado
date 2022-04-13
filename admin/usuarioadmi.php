@@ -21,7 +21,7 @@ include_once("../conexion.php");
 				<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/adminp.png" alt="UserIcon">
-					<figcaption class="text-center text-titles">Admin</figcaption>
+					<figcaption class="text-center text-titles">bienvenido <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
 				</figure>
 				<ul class="full-box list-unstyled text-center">
 					<!--<li>
@@ -39,11 +39,11 @@ include_once("../conexion.php");
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="home.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-- <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -90,9 +90,9 @@ include_once("../conexion.php");
 						<li>
 							<a href="mercadoadmi.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados</a>
 						</li>
-						<!--<li>
-							<a href="payments.html"><i class="zmdi zmdi-money zmdi-hc-fw"></i> Payments</a>
-						</li>-->
+						<li>
+							<a href="productoradmi.php"><img src="../img/sbasket.png" alt="bir"><!--<i class="zmdi zmdi-money zmdi-hc-fw">--></i> Productores</a>
+						</li>
 					</ul>
 				</li>
 				<li>
@@ -102,6 +102,9 @@ include_once("../conexion.php");
 					<ul class="list-unstyled full-box">
 						<li>
 							<a href="ubicacionadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Ubicacion</a>
+						</li>
+						<li>
+							<a href="direccionproadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Direccion productor</a>
 						</li>
 					</ul>
 				</li>
@@ -170,6 +173,7 @@ include_once("../conexion.php");
 			  <h1 class="text-titles"><img src="../img/users_844.png" alt="bir"><!--<i class="zmdi zmdi-male-female zmdi-hc-fw"></i>--> Usuarios <small>administrar</small></h1>
 			</div>
 			<p class="lead">En esta parte puedes agregar y editar a los usuarios que contiene el sistema!</p>
+			<p>buscar por usuario</p>
 		</div>
 		<!--<div class="container-fluid">
 			<div class="row">
@@ -327,13 +331,13 @@ include_once("../conexion.php");
 		<input type="submit" value="Buscar" name="btnbuscar"><input type="text" name="txtbuscar" id="cajabuscar" placeholder="&#128270;Ingresar nombre de usuario">
 		</form>
 		</div>
-			<tr><th colspan="5"><h1>LISTAR USUARIOS</h1><th><a style="font-weight: normal; font-size: 14px;" onclick="abrirform()">Agregar</a></th></tr>
+			<tr><th colspan="4"><h1>LISTAR USUARIOS</h1><th><a style="font-weight: normal; font-size: 14px;" onclick="abrirform()">Agregar</a></th></tr>
 			<tr>
 		    <th>Id</th>
 			<th>Usuario</th>
             <th>Contraseña</th>
             <th>Id_rol</th>
-            <th>Id_pro</th>
+            <!--<th>Id_pro</th>-->
             <th>Acción</th>
 			</tr>
         <?php 
@@ -341,22 +345,23 @@ include_once("../conexion.php");
 if(isset($_POST['btnbuscar']))
 {
 $buscar = $_POST['txtbuscar'];
-$queryusuarios = mysqli_query($conexion, "SELECT ID,usuario,contraseña,id_rol FROM administrador where usuario like '".$buscar."%'");
+$queryusuarios = mysqli_query($conexion, "SELECT id,Usuario,Contraseña,id_rol FROM usuarios where Usuario like '".$buscar."%'");
 }
 else
 {
-$queryusuarios = mysqli_query($conexion, "SELECT * FROM administrador ORDER BY ID asc");
+$queryusuarios = mysqli_query($conexion, "SELECT * FROM usuarios ORDER BY id asc");
 }
 		$numerofila = 0;
         while($mostrar = mysqli_fetch_array($queryusuarios)) 
 		{    $numerofila++;    
             echo "<tr>";
 			/*echo "<td>".$numerofila."</td>";*/
-            echo "<td>".$mostrar['Id']."</td>";
-            echo "<td>".$mostrar['usuario']."</td>";
-            echo "<td>".$mostrar['contraseña']."</td>";    
+            echo "<td>".$mostrar['id']."</td>";
+            echo "<td>".$mostrar['Usuario']."</td>";
+            echo "<td>".$mostrar['Contraseña']."</td>";    
 			echo "<td>".$mostrar['id_rol']."</td>"; 
-            echo "<td style='width:26%'><a href=\"editaradf.php?cod=$mostrar[ID]\">Modificar</a> | <a href=\"eliminar.php?cod=$mostrar[ID]\" onClick=\"return confirm('¿Estás seguro de eliminar a $mostrar[usuario]?')\">Eliminar</a></td>";           
+            echo "<td style='width:26%'><a href=\"editaradf.php?cod=$mostrar[id]\">Modificar</a> | 
+			<a href=\"eliminarusuadmi.php?cod=$mostrar[id]\" onClick=\"return confirm('¿Estás seguro de eliminar a $mostrar[Usuario]?')\">Eliminar</a></td>";           
 		}
         ?>
     </table>

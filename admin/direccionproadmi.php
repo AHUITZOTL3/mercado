@@ -6,17 +6,14 @@ $usuario = $_SESSION['usuario'];
 if (!isset($usuario)) {
 	header("Location: ../login.php");
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>Registration</title>
+	<title>Productores</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/main.css">
-	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
 	<!-- SideBar -->
@@ -113,7 +110,7 @@ if (!isset($usuario)) {
 						<li>
 							<a href="ubicacionadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Ubicacion</a>
 						</li>
-						<li>
+                        <li>
 							<a href="direccionproadmi.php"><img src="../img/ubi.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Direccion productor</a>
 						</li>
 					</ul>
@@ -180,53 +177,204 @@ if (!isset($usuario)) {
 		<!-- Content page -->
 		<div class="container-fluid">
 			<div class="page-header">
-			  <h1 class="text-titles"><img src="../img/shoppingb.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados <small>lista</small></h1>
+			  <h1 class="text-titles"><img src="../img/locations.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Ubicacion productores <small>Lista</small></h1>
 			</div>
-			<p class="lead">Muestra los datos sobre los mercados regisrados en el sistema !</p>
+			<p class="lead">Aqui se muestra los datos de direccion de los Productores registrados!</p>
 		</div>
 		<div class="container-fluid">
 			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
-					  	<li class="active"><a href="#new" data-toggle="tab">New</a></li>
-					  	<li><a href="#list" data-toggle="tab">List</a></li>
+					  	<li class="active"><a href="#newSchool" data-toggle="tab"><i class="zmdi zmdi-balance"></i> School Data</a></li>
+					  	<li><a href="#newYear" data-toggle="tab"><i class="zmdi zmdi-calendar-check"></i> New Year</a></li>
+					  	<li><a href="#listYear" data-toggle="tab"><i class="zmdi zmdi-calendar-note"></i> List Year</a></li>
+					  	<li><a href="#newPeriod" data-toggle="tab"><i class="zmdi zmdi-timer"></i> New Period</a></li>
+					  	<li><a href="#listPeriod" data-toggle="tab"><i class="zmdi zmdi-time-restore"></i> List Period</a></li>
 					</ul>
-					<div id="myTabContent" class="tab-content">
-						<div class="tab-pane fade active in" id="new">
+					<div class="tab-content">
+						<div class="tab-pane fade active in" id="newSchool">
 							<div class="container-fluid">
 								<div class="row">
 									<div class="col-xs-12 col-md-10 col-md-offset-1">
 									    <form action="">
 									    	<div class="form-group label-floating">
-											  <label class="control-label">Payment</label>
+											  <label class="control-label">NIT, CODE</label>
 											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Name</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Address</label>
+											  <textarea class="form-control"></textarea>
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Phone</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">FAX</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Email</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">WEB</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Country</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">City</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Coin</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Max Score</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Min Score</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group">
+										        <label class="control-label">Year</label>
+										        <select class="form-control">
+										          	<option>2017</option>
+										          	<option>2016</option>
+										          	<option>2015</option>
+										        </select>
+										    </div>
+											<div class="form-group">
+										      <label class="control-label">School Logo</label>
+										      <div>
+										        <input type="text" readonly="" class="form-control" placeholder="Browse...">
+										        <input type="file" >
+										      </div>
+										    </div>
+										    <p class="text-center">
+										    	<button href="#!" class="btn btn-info btn-raised btn-sm"><i class="zmdi zmdi-floppy"></i> Save</button>
+										    </p>
+									    </form>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="newYear">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-md-10 col-md-offset-1">
+									    <form action="">
+									    	<div class="form-group label-floating">
+											  <label class="control-label">Year</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group">
+											  <label class="control-label">Start Date</label>
+											  <input class="form-control" type="date">
+											</div>
+											<div class="form-group">
+											  <label class="control-label">End Date</label>
+											  <input class="form-control" type="date">
+											</div>
+										    <p class="text-center">
+										    	<button href="#!" class="btn btn-info btn-raised btn-sm"><i class="zmdi zmdi-floppy"></i> Save</button>
+										    </p>
+									    </form>
+									</div>
+								</div>
+							</div>
+						</div>
+					  	<div class="tab-pane fade" id="listYear">
+							<div class="table-responsive">
+								<table class="table table-hover text-center">
+									<thead>
+										<tr>
+											<th class="text-center">#</th>
+											<th class="text-center">Year</th>
+											<th class="text-center">Start Date</th>
+											<th class="text-center">End Date</th>
+											<th class="text-center">Update</th>
+											<th class="text-center">Delete</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>2017</td>
+											<td>23/01/2017</td>
+											<td>07/11/2017</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>2016</td>
+											<td>23/01/2016</td>
+											<td>07/11/2016</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>2015</td>
+											<td>23/01/2015</td>
+											<td>07/11/2015</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+									</tbody>
+								</table>
+								<ul class="pagination pagination-sm">
+								  	<li class="disabled"><a href="#!">«</a></li>
+								  	<li class="active"><a href="#!">1</a></li>
+								  	<li><a href="#!">2</a></li>
+								  	<li><a href="#!">3</a></li>
+								  	<li><a href="#!">4</a></li>
+								  	<li><a href="#!">5</a></li>
+								  	<li><a href="#!">»</a></li>
+								</ul>
+							</div>
+					  	</div>
+					  	<div class="tab-pane fade" id="newPeriod">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-md-10 col-md-offset-1">
+									    <form action="">
+									    	<div class="form-group label-floating">
+											  <label class="control-label">Name</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Status</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group">
+											  <label class="control-label">Start Date</label>
+											  <input class="form-control" type="date">
+											</div>
+											<div class="form-group">
+											  <label class="control-label">End Date</label>
+											  <input class="form-control" type="date">
 											</div>
 											<div class="form-group label-floating">
 											  <label class="control-label">Amount</label>
 											  <input class="form-control" type="text">
 											</div>
-											<div class="form-group label-floating">
-											  <label class="control-label">Student Code</label>
-											  <textarea class="form-control"></textarea>
-											</div>
-											<div class="form-group">
-										        <label class="control-label">Section</label>
-										        <select class="form-control">
-										          <option>1 grade</option>
-										          <option>2 grade</option>
-										          <option>3 grade</option>
-										          <option>4 grade</option>
-										          <option>5 grade</option>
-										        </select>
-										    </div>
 											<div class="form-group">
 										        <label class="control-label">Year</label>
 										        <select class="form-control">
-										          <option>2017</option>
-										          <option>2016</option>
-										          <option>2015</option>
-										          <option>2014</option>
-										          <option>2013</option>
+										          	<option>2017</option>
+										          	<option>2016</option>
+										          	<option>2015</option>
 										        </select>
 										    </div>
 										    <p class="text-center">
@@ -237,17 +385,17 @@ if (!isset($usuario)) {
 								</div>
 							</div>
 						</div>
-					  	<div class="tab-pane fade" id="list">
+					  	<div class="tab-pane fade" id="listPeriod">
 							<div class="table-responsive">
 								<table class="table table-hover text-center">
 									<thead>
 										<tr>
 											<th class="text-center">#</th>
-											<th class="text-center">Payment</th>
+											<th class="text-center">Name</th>
+											<th class="text-center">Status</th>
+											<th class="text-center">Start Date</th>
+											<th class="text-center">End Date</th>
 											<th class="text-center">Amount</th>
-											<th class="text-center">Pending</th>
-											<th class="text-center">Student</th>
-											<th class="text-center">Section</th>
 											<th class="text-center">Year</th>
 											<th class="text-center">Update</th>
 											<th class="text-center">Delete</th>
@@ -256,44 +404,33 @@ if (!isset($usuario)) {
 									<tbody>
 										<tr>
 											<td>1</td>
-											<td>$70</td>
+											<td>Period 1</td>
+											<td>Active</td>
+											<td>23/01/2017</td>
+											<td>23/03/2017</td>
 											<td>$40</td>
-											<td>$30</td>
-											<td>Carlos Alfaro</td>
-											<td>Section</td>
 											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>2</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Claudia Rodriguez</td>
-											<td>Section</td>
+											<td>Period 2</td>
+											<td>Active</td>
+											<td>24/03/2017</td>
+											<td>23/06/2017</td>
+											<td>$40</td>
 											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>3</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Alicia Melendez</td>
-											<td>Section</td>
-											<td>2017</td>
-											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
-											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
-										</tr>
-										<tr>
-											<td>4</td>
-											<td>$70</td>
-											<td>$70</td>
-											<td>$0</td>
-											<td>Alba Bonilla</td>
-											<td>Section</td>
+											<td>Period 3</td>
+											<td>Active</td>
+											<td>24/06/2017</td>
+											<td>23/09/2017</td>
+											<td>$40</td>
 											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
@@ -315,57 +452,7 @@ if (!isset($usuario)) {
 				</div>
 			</div>-->
 
-			<!--<table>	
-				<div id="barrabuscar">
-			<form method="POST">
-			<input type="submit" value="Buscar" name="btnbuscar"><input type="text" name="txtbuscar" id="cajabuscar" placeholder="&#128270;Ingresar nombre de usuario">
-			</form>-->
-			</div>
-				<!--<tr><th colspan="5"><h1>LISTAR USUARIOS</h1><th><a style="font-weight: normal; font-size: 14px;" onclick="abrirform()">Agregar</a></th></tr>
-				<tr>
-				<th>Id</th>
-				<th>Nombre</th>
-				<th>Cantidad</th>
-				<th>Precio</th>
-				<th>Descripcion</th>
-				<!--<th>Acción</th>--
-				</tr>-->
-			<?php 
-
-		/*if(isset($_POST['btnbuscar']))
-		{
-		$buscar = $_POST['txtbuscar'];
-		$queryusuarios = mysqli_query($conexion, "SELECT idcertificacion,Numcert,Fechaven,Certificadoraem FROM mercadoorganico where nom like '".$buscar."%'");
-		}
-		else
-		{
-		$queryusuarios = mysqli_query($conexion, "SELECT * FROM mercadoorganico ORDER BY idmercado asc");
-		}
-		//$numerofila = 0;
-        while($mostrar = mysqli_fetch_array($queryusuarios)) 
-		{    //$numerofila++;    
-            echo "<tr>";
-			//echo "<td>".$numerofila."</td>";
-			echo "<td>".$mostrar['idmercado']."</td>";
-            echo "<td>".$mostrar['Nombremercado']."</td>";
-			/*echo "<td>"<img height="200px" src="data:image/jpeg;base64, <?php echo base64_encode($separar['pancarta']); ?>"/> "</td>"*
-            echo "<td>".$mostrar['pancarta']."</td>";
-            //echo "<td>".$mostrar['Certificadoraem']."</td>";    
-			//echo "<td>".$mostrar['Alcance']."</td>";  
-            echo "<td style='width:26%'><a href=\"editar.php?idmercado=$mostrar[idmercado]\">Modificar</a> | <a href=\"eliminar.php?cod=$mostrar[idmercado]\" onClick=\"return confirm('¿Estás seguro de eliminar a $mostrar[Nombremercado]?')\">Eliminar</a></td>";           
-		}*/
-        ?>
-    	</table>
-
-		<?php
-		/*include("../conexion.php");
-		$id=$_REQUEST['idmercado'];
-
-		$query="SELECT * FROM mercadoorganico WHERE idmercado='$id";
-		$resultado = $conexion->query($query);
-		$row = $resultado->fetch_assoc();*/
-		?>
-		<center>
+			<center>
 			
 		
 		<table width="1000" height="360" border="1"bgcolor="FFFFF">
@@ -375,34 +462,44 @@ if (!isset($usuario)) {
 				</tr>-->
 				<tr height="60">
 					<th width="80" >Id</th>
-					<th width="80">Nombre</th>
-					<th width="80">pancarta</th>
-					<th width="80" colspan="2">operaciones</th>
+					<th width="80">Calle</th>
+					<th width="80">Numero interior</th>
+					<th width="80">Numero exterior</th>
+					<th width="80">Colonia</th>
+					<th width="80">Ciudad</th>
+					<th width="80">Estado</th>
+					<th width="80">operacion</th>
 				</tr>
 			</thead>
 			<tbody>
 		<?php
 		include("../conexion.php");
-		$query= "SELECT * FROM mercadoorganico";
+		$query= "SELECT * FROM direccion";
 		$resultado = $conexion->query($query);
 		while($row= $resultado->fetch_assoc()){
 		?>
 		<tr>
-			<td width="260"><center><?php echo $row['idmercado']; ?></center></td>
-			<td width="400"><center><?php echo $row['Nombremercado']; ?></center></td>
-			<td><center><img height="200px" src="data:image/jpeg;base64,<?php echo base64_encode($row['pancarta']); ?>"/></center></td>
-			<!--<th width="420" ><a href="modificar.php?idmercado=<?php echo $row['idmercado']; ?>">modificar</a></th>
+			<td width="260"><center><?php echo $row['iddireccion']; ?></center></td>
+			<td width="400"><center><?php echo $row['Calle']; ?></center></td>
+			<td width="260"><center><?php echo $row['Numinter']; ?></center></td>
+			<td width="260"><center><?php echo $row['Numext']; ?></center></td>
+			<td width="260"><center><?php echo $row['Colonia']; ?></center></td>
+			<td width="260"><center><?php echo $row['Ciudad']; ?></center></td>
+			<td width="260"><center><?php echo $row['Estado']; ?></center></td>
+			<!--<td><center><img height="200px" src="data:image/jpeg;base64,<?php echo base64_encode($row['pancarta']); ?>"/></center></td>
+			--<th width="420" ><a href="modificar.php?idmercado=<?php echo $row['idmercado']; ?>">modificar</a></th>
 			<th width="420" ><a href="eliminar.php?idmercado=<?php echo $row['idmercado']; ?>">eliminar</a></th>-->
-			<td width="380" ><a href="modificar.php?idmercado=<?php echo $row['idmercado']; ?>">modificar</a></td>
-			<td width="380" ><a href="eliminar.php?idmercado=<?php echo $row['idmercado']; ?>">eliminar</a></td>
+			<td width="280" ><a href="modificar.php?idmercado=<?php echo $row['iddireccion']; ?>">modificar</a></td>
+			<!--<td width="380" ><a href="eliminar.php?idmercado=<?php echo $row['idubicacion']; ?>">eliminar</a></td>-->
 		</tr>
 		<?php
 		}
 		?>
 		</tbody>
 		</table>
-		</center>		
-			
+		</center>	
+
+
 		</div>
 	</section>
 
@@ -472,7 +569,7 @@ if (!isset($usuario)) {
 			    </div>
 			    <div class="modal-body">
 			        <p>
-			        	En esta ventana muestra!
+			        	En esta ventana!
 			        </p>
 			    </div>
 		      	<div class="modal-footer">
