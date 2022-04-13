@@ -1,11 +1,77 @@
 <?php
 session_start();
 include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
+
+/*$consulta = "SELECT * FROM usuarios WHERE Usuario = '$usuario'";
+$ejecuta = $conexion->query($consulta);
+$extraer = $ejecuta->fetch_assoc();*/
+
+/*$unir = "SELECT u.id, u.Usuario, u.Contraseña, u.id_rol, m.idmercado, m.Nombremercado, m.pancarta, m.id_usuario, 
+b.idubicacion, b.Calle, b.Numint, b.Numext, b.Colonia, b.Ciudad, b.Estado, b.Estado, b.id_mercado 
+FROM usuarios u INNER JOIN mercadoorganico m ON u.id = m.id_usuario INNER JOIN ubicacion b ON m.idmercado = b.id_mercado WHERE usuario = '".$usuario."'";
+$verificar = $conexion->query($unir);
+$separar = $verificar->fetch_array();
+//$q = "SELECT usuarios.Usuario, ubicacion.Calle FROM usuarios INNER JOIN ubicacion ON usuarios.id = ubicacion.id_mercado WHERE usuario = '".$usuario."'";
+	/*$consulta = $conexion->query($q);
+	$perfil = $consulta->fetch_array();
+	if($perfil > 0){
+		$user = $perfil;
+	}*
+
+// generar la consulta para extraer lo datos
+$id = $_GET['idubicacion'];
+$m = "SELECT * FROM ubicacion WHERE idubicacion = '$id'";
+$modificar = $conexion->query($m);
+$row = $modificar->fetch_array(MYSQLI_ASSOC);
+if(isset($_POST['modificar'])){
+// recuparar los datos que se encuentran en cada uno de los imputs
+ $id = $_POST['idu'];
+ $cal = $conexion->real_escape_string($_POST['calle']);
+ $numin = $conexion->real_escape_string($_POST['numi']);
+ $numex = $conexion->real_escape_string($_POST['nume']);
+ $colo = $conexion->real_escape_string($_POST['col']);
+ $ciud = $conexion->real_escape_string($_POST['ciu']);
+ $esta = $conexion->real_escape_string($_POST['est']);
+ // realizar la consulta para modificar los datos
+ $actuliza = "UPDATE ubicacion SET calle ='$cal', Numint ='$numin', Numext ='$numex', Colonia ='$colo', Ciudad ='$ciud', Estado ='$esta' WHERE idubicacion = '$id'";
+ $actualizar = $conexion->query($actuliza);
+ header("location:ubicacionmer.php");
+}
+$conexion->close();*/
+$q = "SELECT * FROM usuarios WHERE Usuario = '".$usuario."'";
+	$consulta = $conexion->query($q);
+	$perfil = $consulta->fetch_array();
+	if($perfil > 0){
+		$user = $perfil;
+	}
+
+	// generar la consulta para extraer lo datos
+	$id = $_GET['id'];
+	$m = "SELECT * FROM usuarios WHERE id = '$id'";
+	$modificar = $conexion->query($m);
+	$row = $modificar->fetch_array(MYSQLI_ASSOC);
+	if(isset($_POST['modificar'])){
+	// recuparar los datos que se encuentran en cada uno de los imputs
+	 $id = $_POST['id'];
+	 $nombre = $conexion->real_escape_string($_POST['usua']);
+	 $apellido1 = $conexion->real_escape_string($_POST['contra']);
+	 // realizar la consulta para modificar los datos
+	 $actuliza = "UPDATE usuarios SET Usuario = '$nombre', Contraseña = '$apellido1' WHERE id = '$id'";
+	 $actualizar = $conexion->query($actuliza);
+	 header("location:usuariomer.php");
+	}
+	$conexion->close();
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>Productos mercado</title>
+	<title>ubicacionmercado</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/mercado.css">
@@ -158,7 +224,7 @@ include '../conexion.php';
 						<i class="zmdi zmdi-notifications-none"></i>
 						<span class="badge">7</span>
 					</a>
-				</li>-->
+				</li>--
 				<li>
 					<a href="#!" class="btn-search">
 						<i class="zmdi zmdi-search"></i>
@@ -168,42 +234,210 @@ include '../conexion.php';
 					<a href="#!" class="btn-modal-help">
 						<i class="zmdi zmdi-help-outline"></i>
 					</a>
-				</li>
+				</li>-->
 			</ul>
 		</nav>
 		<!-- Content page -->
 		<div class="container-fluid">
 			<div class="page-header">
-			  <h1 class="text-titles"><img src="../img/orgaprod.png" alt="bir"><!--<i class="zmdi zmdi-book zmdi-hc-fw"></i>--> Productos <small>lista</small></h1>
+			<h1 class="text-titles"><img src="../img/2.jpg" alt="bir"><!--<i class="zmdi zmdi-male-female zmdi-hc-fw"></i>--> Usuario <small>Perfil</small></h1>
 			</div>
-			<p class="lead">Muestra la lista de productos que contienen los mercados !</p>
+			<p class="lead">Editar datos de la sesion del mercado registrado!</p>
 		</div>
 		<div class="container-fluid">
 			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
-					  	<li class="active"><a href="#new" data-toggle="tab">New</a></li>
-					  	<li><a href="#list" data-toggle="tab">List</a></li>
+					  	<li class="active"><a href="#newSchool" data-toggle="tab"><i class="zmdi zmdi-balance"></i> School Data</a></li>
+					  	<li><a href="#newYear" data-toggle="tab"><i class="zmdi zmdi-calendar-check"></i> New Year</a></li>
+					  	<li><a href="#listYear" data-toggle="tab"><i class="zmdi zmdi-calendar-note"></i> List Year</a></li>
+					  	<li><a href="#newPeriod" data-toggle="tab"><i class="zmdi zmdi-timer"></i> New Period</a></li>
+					  	<li><a href="#listPeriod" data-toggle="tab"><i class="zmdi zmdi-time-restore"></i> List Period</a></li>
 					</ul>
-					<div id="myTabContent" class="tab-content">
-						<div class="tab-pane fade active in" id="new">
+					<div class="tab-content">
+						<div class="tab-pane fade active in" id="newSchool">
 							<div class="container-fluid">
 								<div class="row">
 									<div class="col-xs-12 col-md-10 col-md-offset-1">
 									    <form action="">
 									    	<div class="form-group label-floating">
-											  <label class="control-label">Code</label>
+											  <label class="control-label">NIT, CODE</label>
 											  <input class="form-control" type="text">
 											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Name</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Address</label>
+											  <textarea class="form-control"></textarea>
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Phone</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">FAX</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Email</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">WEB</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Country</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">City</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Coin</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Max Score</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Min Score</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group">
+										        <label class="control-label">Year</label>
+										        <select class="form-control">
+										          	<option>2017</option>
+										          	<option>2016</option>
+										          	<option>2015</option>
+										        </select>
+										    </div>
+											<div class="form-group">
+										      <label class="control-label">School Logo</label>
+										      <div>
+										        <input type="text" readonly="" class="form-control" placeholder="Browse...">
+										        <input type="file" >
+										      </div>
+										    </div>
+										    <p class="text-center">
+										    	<button href="#!" class="btn btn-info btn-raised btn-sm"><i class="zmdi zmdi-floppy"></i> Save</button>
+										    </p>
+									    </form>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade" id="newYear">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-md-10 col-md-offset-1">
+									    <form action="">
+									    	<div class="form-group label-floating">
+											  <label class="control-label">Year</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group">
+											  <label class="control-label">Start Date</label>
+											  <input class="form-control" type="date">
+											</div>
+											<div class="form-group">
+											  <label class="control-label">End Date</label>
+											  <input class="form-control" type="date">
+											</div>
+										    <p class="text-center">
+										    	<button href="#!" class="btn btn-info btn-raised btn-sm"><i class="zmdi zmdi-floppy"></i> Save</button>
+										    </p>
+									    </form>
+									</div>
+								</div>
+							</div>
+						</div>
+					  	<div class="tab-pane fade" id="listYear">
+							<div class="table-responsive">
+								<table class="table table-hover text-center">
+									<thead>
+										<tr>
+											<th class="text-center">#</th>
+											<th class="text-center">Year</th>
+											<th class="text-center">Start Date</th>
+											<th class="text-center">End Date</th>
+											<th class="text-center">Update</th>
+											<th class="text-center">Delete</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>2017</td>
+											<td>23/01/2017</td>
+											<td>07/11/2017</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>2016</td>
+											<td>23/01/2016</td>
+											<td>07/11/2016</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>2015</td>
+											<td>23/01/2015</td>
+											<td>07/11/2015</td>
+											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
+											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
+										</tr>
+									</tbody>
+								</table>
+								<ul class="pagination pagination-sm">
+								  	<li class="disabled"><a href="#!">«</a></li>
+								  	<li class="active"><a href="#!">1</a></li>
+								  	<li><a href="#!">2</a></li>
+								  	<li><a href="#!">3</a></li>
+								  	<li><a href="#!">4</a></li>
+								  	<li><a href="#!">5</a></li>
+								  	<li><a href="#!">»</a></li>
+								</ul>
+							</div>
+					  	</div>
+					  	<div class="tab-pane fade" id="newPeriod">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-md-10 col-md-offset-1">
+									    <form action="">
 									    	<div class="form-group label-floating">
 											  <label class="control-label">Name</label>
 											  <input class="form-control" type="text">
 											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Status</label>
+											  <input class="form-control" type="text">
+											</div>
 											<div class="form-group">
-										      <label class="control-label">Status</label>
+											  <label class="control-label">Start Date</label>
+											  <input class="form-control" type="date">
+											</div>
+											<div class="form-group">
+											  <label class="control-label">End Date</label>
+											  <input class="form-control" type="date">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Amount</label>
+											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group">
+										        <label class="control-label">Year</label>
 										        <select class="form-control">
-										          <option>Active</option>
-										          <option>Disable</option>
+										          	<option>2017</option>
+										          	<option>2016</option>
+										          	<option>2015</option>
 										        </select>
 										    </div>
 										    <p class="text-center">
@@ -214,15 +448,18 @@ include '../conexion.php';
 								</div>
 							</div>
 						</div>
-					  	<div class="tab-pane fade" id="list">
+					  	<div class="tab-pane fade" id="listPeriod">
 							<div class="table-responsive">
 								<table class="table table-hover text-center">
 									<thead>
 										<tr>
 											<th class="text-center">#</th>
-											<th class="text-center">Code</th>
 											<th class="text-center">Name</th>
 											<th class="text-center">Status</th>
+											<th class="text-center">Start Date</th>
+											<th class="text-center">End Date</th>
+											<th class="text-center">Amount</th>
+											<th class="text-center">Year</th>
 											<th class="text-center">Update</th>
 											<th class="text-center">Delete</th>
 										</tr>
@@ -230,33 +467,34 @@ include '../conexion.php';
 									<tbody>
 										<tr>
 											<td>1</td>
-											<td>100</td>
-											<td>Mathematics</td>
+											<td>Period 1</td>
 											<td>Active</td>
+											<td>23/01/2017</td>
+											<td>23/03/2017</td>
+											<td>$40</td>
+											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>2</td>
-											<td>500</td>
-											<td>Science</td>
+											<td>Period 2</td>
 											<td>Active</td>
+											<td>24/03/2017</td>
+											<td>23/06/2017</td>
+											<td>$40</td>
+											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>3</td>
-											<td>300</td>
-											<td>Social</td>
+											<td>Period 3</td>
 											<td>Active</td>
-											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
-											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
-										</tr>
-										<tr>
-											<td>4</td>
-											<td>700</td>
-											<td>English</td>
-											<td>Active</td>
+											<td>24/06/2017</td>
+											<td>23/09/2017</td>
+											<td>$40</td>
+											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
@@ -276,48 +514,20 @@ include '../conexion.php';
 					</div>
 				</div>
 			</div>-->
-			<a href="regiscertificli.php">Registrar</a></td>
-			<table>	
-				<div id="barrabuscar">
-			<form method="POST">
-			<input type="submit" value="Buscar" name="btnbuscar"><input type="text" name="txtbuscar" id="cajabuscar" placeholder="&#128270;Ingresar nombre de usuario">
-			</form>
-			</div>
-				<tr><th colspan="5"><h1>LISTAR USUARIOS</h1><th><a style="font-weight: normal; font-size: 14px;" onclick="abrirform()">Agregar</a></th></tr>
-				<tr>
-				<th>Id</th>
-				<th>Nombre</th>
-				<th>Cantidad</th>
-				<th>Precio</th>
-				<th>Descripcion</th>
-				<!--<th>Acción</th>-->
-				</tr>
-			<?php 
 
-		if(isset($_POST['btnbuscar']))
-		{
-		$buscar = $_POST['txtbuscar'];
-		$queryusuarios = mysqli_query($conexion, "SELECT idproducto,Nombre,Cantidadpro,Precio,Descripcion FROM producto where nom like '".$buscar."%'");
-		}
-		else
-		{
-		$queryusuarios = mysqli_query($conexion, "SELECT * FROM producto ORDER BY idproducto asc");
-		}
-		//$numerofila = 0;
-        while($mostrar = mysqli_fetch_array($queryusuarios)) 
-		{    //$numerofila++;    
-            echo "<tr>";
-			//echo "<td>".$numerofila."</td>";
-			echo "<td>".$mostrar['idproducto']."</td>";
-            echo "<td>".$mostrar['Nombre']."</td>";
-            echo "<td>".$mostrar['Cantidadpro']."</td>";
-            echo "<td>".$mostrar['Precio']."</td>";    
-			echo "<td>".$mostrar['Descripcion']."</td>";  
-            echo "<td style='width:26%'><a href=\"editar.php?idproducto=$mostrar[idproducto]\">Modificar</a> | <a href=\"eliminar.php?cod=$mostrar[idproducto]\" onClick=\"return confirm('¿Estás seguro de eliminar a $mostrar[Nombre]?')\">Eliminar</a></td>";           
-		}
-        ?>
-    	</table>
-
+            <h3>Editar perfil:</h3>
+		<form class="" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+                    <div class="row">
+                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                        <input type="text" name="usua" class="form-control" value="<?php echo $row['Usuario']; ?>">
+                    </div>
+                    <div class="row">
+                        <input type="text" name="contra" class="form-control" value="<?php echo $row['Contraseña']; ?>" >
+                    </div>
+                    <div class="row">
+                        <input type="submit" name="modificar" class="btn btn-success btn-sm btn-block" value="Modificar">
+                    </div>
+        </form>
 
 		</div>
 	</section>
@@ -388,7 +598,7 @@ include '../conexion.php';
 			    </div>
 			    <div class="modal-body">
 			        <p>
-			        	En esta ventana se muestra!
+			        	En esta ventana!
 			        </p>
 			    </div>
 		      	<div class="modal-footer">

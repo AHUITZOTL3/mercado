@@ -1,11 +1,53 @@
 <?php
 session_start();
 include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
+
+$consulta = "SELECT * FROM usuarios WHERE Usuario = '$usuario'";
+$ejecuta = $conexion->query($consulta);
+$extraer = $ejecuta->fetch_assoc();
+
+$unir = "SELECT u.id, u.Usuario, u.Contraseña, u.id_rol, m.idmercado, m.Nombremercado, m.pancarta, m.id_usuario, 
+b.idubicacion, b.Calle, b.Numint, b.Numext, b.Colonia, b.Ciudad, b.Estado, b.Estado, b.id_mercado 
+FROM usuarios u INNER JOIN mercadoorganico m ON u.id = m.id_usuario INNER JOIN ubicacion b ON m.idmercado = b.id_mercado WHERE usuario = '".$usuario."'";
+$verificar = $conexion->query($unir);
+$separar = $verificar->fetch_assoc();
+//$q = "SELECT usuarios.Usuario, ubicacion.Calle FROM usuarios INNER JOIN ubicacion ON usuarios.id = ubicacion.id_mercado WHERE usuario = '".$usuario."'";
+	/*$consulta = $conexion->query($q);
+	$perfil = $consulta->fetch_array();
+	if($perfil > 0){
+		$user = $perfil;
+	}*/
+	
+//$conexion->close();
+	// generar la consulta para extraer lo datos
+	$id = $_GET['id'];
+	$m = "SELECT * FROM usuarios WHERE id = '$id'";
+	$modificar = $conexion->query($m);
+	$row = $modificar->fetch_array(MYSQLI_ASSOC);
+	if(isset($_POST['modificar'])){
+	// recuparar los datos que se encuentran en cada uno de los imputs
+	 $id = $_POST['id'];
+	 $nombre = $conexion->real_escape_string($_POST['nombre']);
+	 //$pancartaa = $conexion->real_escape_string($_POST['panc']);
+     $pancartaa = addslashes(file_get_contents($_FILES['pancarta']['tmp_name']));
+	 // realizar la consulta para modificar los datos
+	 $actuliza = "UPDATE mercadoorganico SET Nombremercado = '$nombre', pancarta = '$pancartaa' WHERE idmercado = '$id'";
+	 $actualizar = $conexion->query($actuliza);
+	 header("location:mercadomer.php");
+	}
+	$conexion->close();
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>Productos mercado</title>
+	<title>Registration</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/mercado.css">
@@ -174,9 +216,9 @@ include '../conexion.php';
 		<!-- Content page -->
 		<div class="container-fluid">
 			<div class="page-header">
-			  <h1 class="text-titles"><img src="../img/orgaprod.png" alt="bir"><!--<i class="zmdi zmdi-book zmdi-hc-fw"></i>--> Productos <small>lista</small></h1>
+			  <h1 class="text-titles"><img src="../img/shoppingb.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados <small>lista</small></h1>
 			</div>
-			<p class="lead">Muestra la lista de productos que contienen los mercados !</p>
+			<p class="lead">Muestra los datos y puedes editar los datos del	 sistema !</p>
 		</div>
 		<div class="container-fluid">
 			<!--<div class="row">
@@ -192,18 +234,35 @@ include '../conexion.php';
 									<div class="col-xs-12 col-md-10 col-md-offset-1">
 									    <form action="">
 									    	<div class="form-group label-floating">
-											  <label class="control-label">Code</label>
+											  <label class="control-label">Payment</label>
 											  <input class="form-control" type="text">
 											</div>
-									    	<div class="form-group label-floating">
-											  <label class="control-label">Name</label>
+											<div class="form-group label-floating">
+											  <label class="control-label">Amount</label>
 											  <input class="form-control" type="text">
+											</div>
+											<div class="form-group label-floating">
+											  <label class="control-label">Student Code</label>
+											  <textarea class="form-control"></textarea>
 											</div>
 											<div class="form-group">
-										      <label class="control-label">Status</label>
+										        <label class="control-label">Section</label>
 										        <select class="form-control">
-										          <option>Active</option>
-										          <option>Disable</option>
+										          <option>1 grade</option>
+										          <option>2 grade</option>
+										          <option>3 grade</option>
+										          <option>4 grade</option>
+										          <option>5 grade</option>
+										        </select>
+										    </div>
+											<div class="form-group">
+										        <label class="control-label">Year</label>
+										        <select class="form-control">
+										          <option>2017</option>
+										          <option>2016</option>
+										          <option>2015</option>
+										          <option>2014</option>
+										          <option>2013</option>
 										        </select>
 										    </div>
 										    <p class="text-center">
@@ -220,9 +279,12 @@ include '../conexion.php';
 									<thead>
 										<tr>
 											<th class="text-center">#</th>
-											<th class="text-center">Code</th>
-											<th class="text-center">Name</th>
-											<th class="text-center">Status</th>
+											<th class="text-center">Payment</th>
+											<th class="text-center">Amount</th>
+											<th class="text-center">Pending</th>
+											<th class="text-center">Student</th>
+											<th class="text-center">Section</th>
+											<th class="text-center">Year</th>
 											<th class="text-center">Update</th>
 											<th class="text-center">Delete</th>
 										</tr>
@@ -230,33 +292,45 @@ include '../conexion.php';
 									<tbody>
 										<tr>
 											<td>1</td>
-											<td>100</td>
-											<td>Mathematics</td>
-											<td>Active</td>
+											<td>$70</td>
+											<td>$40</td>
+											<td>$30</td>
+											<td>Carlos Alfaro</td>
+											<td>Section</td>
+											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>2</td>
-											<td>500</td>
-											<td>Science</td>
-											<td>Active</td>
+											<td>$70</td>
+											<td>$70</td>
+											<td>$0</td>
+											<td>Claudia Rodriguez</td>
+											<td>Section</td>
+											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>3</td>
-											<td>300</td>
-											<td>Social</td>
-											<td>Active</td>
+											<td>$70</td>
+											<td>$70</td>
+											<td>$0</td>
+											<td>Alicia Melendez</td>
+											<td>Section</td>
+											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
 										<tr>
 											<td>4</td>
-											<td>700</td>
-											<td>English</td>
-											<td>Active</td>
+											<td>$70</td>
+											<td>$70</td>
+											<td>$0</td>
+											<td>Alba Bonilla</td>
+											<td>Section</td>
+											<td>2017</td>
 											<td><a href="#!" class="btn btn-success btn-raised btn-xs"><i class="zmdi zmdi-refresh"></i></a></td>
 											<td><a href="#!" class="btn btn-danger btn-raised btn-xs"><i class="zmdi zmdi-delete"></i></a></td>
 										</tr>
@@ -276,48 +350,22 @@ include '../conexion.php';
 					</div>
 				</div>
 			</div>-->
-			<a href="regiscertificli.php">Registrar</a></td>
-			<table>	
-				<div id="barrabuscar">
-			<form method="POST">
-			<input type="submit" value="Buscar" name="btnbuscar"><input type="text" name="txtbuscar" id="cajabuscar" placeholder="&#128270;Ingresar nombre de usuario">
-			</form>
-			</div>
-				<tr><th colspan="5"><h1>LISTAR USUARIOS</h1><th><a style="font-weight: normal; font-size: 14px;" onclick="abrirform()">Agregar</a></th></tr>
-				<tr>
-				<th>Id</th>
-				<th>Nombre</th>
-				<th>Cantidad</th>
-				<th>Precio</th>
-				<th>Descripcion</th>
-				<!--<th>Acción</th>-->
-				</tr>
-			<?php 
 
-		if(isset($_POST['btnbuscar']))
-		{
-		$buscar = $_POST['txtbuscar'];
-		$queryusuarios = mysqli_query($conexion, "SELECT idproducto,Nombre,Cantidadpro,Precio,Descripcion FROM producto where nom like '".$buscar."%'");
-		}
-		else
-		{
-		$queryusuarios = mysqli_query($conexion, "SELECT * FROM producto ORDER BY idproducto asc");
-		}
-		//$numerofila = 0;
-        while($mostrar = mysqli_fetch_array($queryusuarios)) 
-		{    //$numerofila++;    
-            echo "<tr>";
-			//echo "<td>".$numerofila."</td>";
-			echo "<td>".$mostrar['idproducto']."</td>";
-            echo "<td>".$mostrar['Nombre']."</td>";
-            echo "<td>".$mostrar['Cantidadpro']."</td>";
-            echo "<td>".$mostrar['Precio']."</td>";    
-			echo "<td>".$mostrar['Descripcion']."</td>";  
-            echo "<td style='width:26%'><a href=\"editar.php?idproducto=$mostrar[idproducto]\">Modificar</a> | <a href=\"eliminar.php?cod=$mostrar[idproducto]\" onClick=\"return confirm('¿Estás seguro de eliminar a $mostrar[Nombre]?')\">Eliminar</a></td>";           
-		}
-        ?>
-    	</table>
-
+		
+  <h3>Editar perfil:</h3>
+		<form class="" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <input type="hidden" name="id" value="<?php echo $separar['idmercado']; ?>">
+                        <input type="text" name="nombre" class="form-control" value="<?php echo $separar['Nombremercado']; ?>">
+                    </div>
+                    <div class="row">
+                    <img height="200px" src="data:image/jpeg;base64, <?php echo base64_encode($separar['pancarta']); ?>"/>
+                        <input type="file" name="pancarta" class="controls" />
+                    </div>
+                    <div class="row">
+                        <input type="submit" name="modificar" class="btn btn-success btn-sm btn-block" value="Modificar">
+                    </div>
+                 </form>
 
 		</div>
 	</section>
@@ -388,7 +436,7 @@ include '../conexion.php';
 			    </div>
 			    <div class="modal-body">
 			        <p>
-			        	En esta ventana se muestra!
+			        	En esta ventana muestra!
 			        </p>
 			    </div>
 		      	<div class="modal-footer">

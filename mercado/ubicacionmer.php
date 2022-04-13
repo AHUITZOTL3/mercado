@@ -1,13 +1,45 @@
 <?php
 session_start();
+include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
+
+$consulta = "SELECT * FROM usuarios WHERE Usuario = '$usuario'";
+$ejecuta = $conexion->query($consulta);
+$extraer = $ejecuta->fetch_assoc();
+/*$q = "SELECT * FROM usuarios WHERE Usuario = '".$usuario."'";
+$unir = "SELECT u.Id_Usuarios, u.Nombre, u.ApellidoP, u.ApellidoM, u.F_Nacimiento, u.Id_Genero, u.Telefono,
+u.Id_Plantel, u.Id_Tusuario, u.Email, u.Usuario, u.Password, u.Img, u.Estado, u.Online, g.Id_Genero, g.NombreG,
+p.Id_Plantel, p.NombreP, t.Id_Tusuario, t.TNombre FROM Usuarios u INNER JOIN Genero g ON u.Id_Genero = g.Id_Genero
+INNER JOIN Plantel p ON u.Id_Plantel = p.Id_Plantel INNER JOIN Tusuario t ON u.Id_Tusuario = t.Id_Tusuario WHERE Usuario = '$usuario'";*/
+
+$unir = "SELECT u.id, u.Usuario, u.Contraseña, u.id_rol, m.idmercado, m.Nombremercado, m.pancarta, m.id_usuario, 
+b.idubicacion, b.Calle, b.Numint, b.Numext, b.Colonia, b.Ciudad, b.Estado, b.Estado, b.id_mercado 
+FROM usuarios u INNER JOIN mercadoorganico m ON u.id = m.id_usuario INNER JOIN ubicacion b ON m.idmercado = b.id_mercado WHERE usuario = '".$usuario."'";
+$verificar = $conexion->query($unir);
+$separar = $verificar->fetch_array();
+//$q = "SELECT usuarios.Usuario, ubicacion.Calle FROM usuarios INNER JOIN ubicacion ON usuarios.id = ubicacion.id_mercado WHERE usuario = '".$usuario."'";
+	/*$consulta = $conexion->query($q);
+	$perfil = $consulta->fetch_array();
+	if($perfil > 0){
+		$user = $perfil;
+	}*/
+	
+$conexion->close();
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>School</title>
+	<title>Ubicacion mercado</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/mercado.css">
+	<link rel="stylesheet" href="../css/main.css">
+	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
 	<!-- SideBar -->
@@ -22,7 +54,7 @@ session_start();
 			<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/fruits.png" alt="UserIcon">
-					<figcaption class="text-center text-titles">Admin</figcaption>
+					<figcaption class="text-center text-titles">bienvenido <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
 				</figure>
 				<ul class="full-box list-unstyled text-center">
 					<!--<li>
@@ -40,11 +72,11 @@ session_start();
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="iniciomer.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-- <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -173,10 +205,10 @@ session_start();
 			<div class="page-header">
 			  <h1 class="text-titles"><img src="../img/locations.png" alt="bir"><!--<i class="zmdi zmdi-balance zmdi-hc-fw"></i>--> Ubicacion <small>Lista</small></h1>
 			</div>
-			<p class="lead">Aqui se muestra los datos de ubicaacion de los mercados registrados!</p>
+			<p class="lead">Aqui se muestra los datos de ubicacion del mercado registrado!</p>
 		</div>
 		<div class="container-fluid">
-			<div class="row">
+			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
 					  	<li class="active"><a href="#newSchool" data-toggle="tab"><i class="zmdi zmdi-balance"></i> School Data</a></li>
@@ -444,7 +476,49 @@ session_start();
 					  	</div>
 					</div>
 				</div>
-			</div>
+			</div>-->
+
+			<table border="1">
+			<!-- -->
+
+			<tr>
+				<td>Calle:</td>
+				<td><?php echo $separar['Calle']; ?></td>
+				<!-- $id_sesion -->
+			</tr>
+			<tr>
+				<td>Número interior:</td>
+				<td><?php echo $separar['Numint']; ?></td>
+				<!-- $usuario_sesion -->
+			</tr>
+			<tr>
+				<td>Número exterior:</td>
+				<td><?php echo $separar['Numext']; ?></td>
+				<!-- $contraseña_sesion -->
+			</tr>
+			<tr>
+				<td>Colonia:</td>
+				<td><?php echo $separar['Colonia']; ?></td>
+				<!-- $contraseña_sesion -->
+			</tr>
+			<tr>
+				<td>Ciudad:</td>
+				<td><?php echo $separar['Ciudad']; ?></td>
+				<!-- $contraseña_sesion -->
+			</tr>
+			<tr>
+				<td>Estado:</td>
+				<td><?php echo $separar['Estado']; ?></td>
+				<!-- $contraseña_sesion -->
+			</tr>
+			<tr>
+			<!--<a href="editaradf.php?ID=<?php echo $row->ID;?>">modificar</a>-->
+			<td><a href="editarubimer.php?idubicacion=<?php echo $separar['idubicacion'];?>" >modificar</a></td>
+			<!--<td><a href="moodificar.php?ID=<?php echo $row['ID'];?>">Editar</a> </td>-->
+			</tr>
+		
+		</table>
+
 		</div>
 	</section>
 

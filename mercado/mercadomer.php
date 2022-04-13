@@ -1,13 +1,40 @@
 <?php
 session_start();
+include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
+
+$consulta = "SELECT * FROM usuarios WHERE Usuario = '$usuario'";
+$ejecuta = $conexion->query($consulta);
+$extraer = $ejecuta->fetch_assoc();
+
+$unir = "SELECT u.id, u.Usuario, u.Contraseña, u.id_rol, m.idmercado, m.Nombremercado, m.pancarta, m.id_usuario, 
+b.idubicacion, b.Calle, b.Numint, b.Numext, b.Colonia, b.Ciudad, b.Estado, b.Estado, b.id_mercado 
+FROM usuarios u INNER JOIN mercadoorganico m ON u.id = m.id_usuario INNER JOIN ubicacion b ON m.idmercado = b.id_mercado WHERE usuario = '".$usuario."'";
+$verificar = $conexion->query($unir);
+$separar = $verificar->fetch_assoc();
+//$q = "SELECT usuarios.Usuario, ubicacion.Calle FROM usuarios INNER JOIN ubicacion ON usuarios.id = ubicacion.id_mercado WHERE usuario = '".$usuario."'";
+	/*$consulta = $conexion->query($q);
+	$perfil = $consulta->fetch_array();
+	if($perfil > 0){
+		$user = $perfil;
+	}*/
+	
+$conexion->close();
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<title>Registration</title>
+	<title>Datos mercado</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/mercado.css">
+	<link rel="stylesheet" href="../css/main.css">
+	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
 	<!-- SideBar -->
@@ -22,7 +49,7 @@ session_start();
 			<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/fruits.png" alt="UserIcon">
-					<figcaption class="text-center text-titles">Admin</figcaption>
+					<figcaption class="text-center text-titles">bienvenido <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
 				</figure>
 				<ul class="full-box list-unstyled text-center">
 					<!--<li>
@@ -40,11 +67,11 @@ session_start();
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="iniciomer.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-- <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -173,10 +200,10 @@ session_start();
 			<div class="page-header">
 			  <h1 class="text-titles"><img src="../img/shoppingb.png" alt="bir"><!--<i class="zmdi zmdi-money-box zmdi-hc-fw"></i>--> Mercados <small>lista</small></h1>
 			</div>
-			<p class="lead">Muestra los datos sobre los mercados regisrados en el sistema !</p>
+			<p class="lead">Muestra los datos sobre el mercado registrado en el sistema !</p>
 		</div>
 		<div class="container-fluid">
-			<div class="row">
+			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
 					  	<li class="active"><a href="#new" data-toggle="tab">New</a></li>
@@ -304,7 +331,54 @@ session_start();
 					  	</div>
 					</div>
 				</div>
-			</div>
+			</div>-->
+
+			<form action="validarm.php" method="post" enctype="multipart/form-data">
+    <h4>Datos mercado:</h4>
+    <!--<input class="controls" type="text" name="usuario" placeholder="Ingrese correo" required>
+    <input class="controls" type="password" name="contraseña" id="correo" placeholder="Ingrese su Contraseña" required>
+    <div class="ub1">Datos personales: </div>
+
+      <input class="controls" type="text" name="nombre" placeholder="Ingrese nombre del mercado" required>
+      <div class="ub1">Pancarta: </div>
+      <!--<input class="controls" type="text" name="pancarta" placeholder="Ingrese pancarta">--
+      <input class="controls" type="file" name="pancarta" >
+      <div class="ub1">Domicilio: </div>
+      <input class="controls" type="text" name="calle" placeholder="Ingrese calle " required>
+      <input class="controls" type="text" name="numi" placeholder="Ingrese num int" required>
+      <input class="controls" type="text" name="nume" placeholder="Ingrese num ext" required>
+      <input class="controls" type="text" name="colonia" placeholder="Ingrese colonia" required>
+      <input class="controls" type="text" name="ciudad" placeholder="Ingrese ciudad" required>
+      <input class="controls" type="text" name="estado" placeholder="Ingrese estado" required>
+      <input class="controls" type="text" name="coordenas" placeholder="Ingrese coordenadas" required>
+    
+    <!--<p>Estoy de acuerdo con <a href="#">Terminos y Condiciones</a></p>--
+    <input class="botons" type="submit" value="Registrar" name="btnregistrar">
+    <p><a href="login.php">¿Ya tengo Cuenta?</a></p>
+    <p><a href="index.php">REGRESAR</a></p>-->
+  <!--</section>-->
+  		<table border="1">
+			<tr>
+				<td>Id:</td>
+				<td><?php echo $separar['idmercado']; ?></td>
+				<!-- $id_sesion -->
+			</tr>
+			<tr>
+				<td>Nombre del mercado:</td>
+				<td><?php echo $separar['Nombremercado']; ?></td>
+				<!-- $usuario_sesion -->
+			</tr>
+			<tr>
+				<td>Pancarta:</td>
+				<td><img height="200px" src="data:image/jpeg;base64, <?php echo base64_encode($separar['pancarta']); ?>"/> </td>
+				<!-- $contraseña_sesion -->
+			</tr>
+			<tr>
+			<td><a href="editarmermer.php?id=<?php echo $separar['idmercado'];?>" >modificar</a></td>
+			</tr>
+		</table>
+  </form>
+
 		</div>
 	</section>
 

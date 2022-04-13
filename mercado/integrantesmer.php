@@ -1,10 +1,41 @@
 <?php
 session_start();
+include '../conexion.php';
+
+$usuario = $_SESSION['usuario'];
+if (!isset($usuario)) {
+	header("Location: ../login.php");
+}
+
+$consulta = "SELECT * FROM usuarios WHERE Usuario = '$usuario'";
+$ejecuta = $conexion->query($consulta);
+$extraer = $ejecuta->fetch_assoc();
+/*$q = "SELECT * FROM usuarios WHERE Usuario = '".$usuario."'";
+$unir = "SELECT u.Id_Usuarios, u.Nombre, u.ApellidoP, u.ApellidoM, u.F_Nacimiento, u.Id_Genero, u.Telefono,
+u.Id_Plantel, u.Id_Tusuario, u.Email, u.Usuario, u.Password, u.Img, u.Estado, u.Online, g.Id_Genero, g.NombreG,
+p.Id_Plantel, p.NombreP, t.Id_Tusuario, t.TNombre FROM Usuarios u INNER JOIN Genero g ON u.Id_Genero = g.Id_Genero
+INNER JOIN Plantel p ON u.Id_Plantel = p.Id_Plantel INNER JOIN Tusuario t ON u.Id_Tusuario = t.Id_Tusuario WHERE Usuario = '$usuario'";*/
+
+$unir = "SELECT u.id, u.Usuario, u.Contraseña, u.id_rol, i.idintegrante, i.Nombre, i.producto, i.idusuarioo 
+FROM usuarios u INNER JOIN integrantes i ON u.id = i.idusuarioo WHERE Usuario = '".$usuario."'";
+$verificar = $conexion->query($unir);
+$separar = $verificar->fetch_array();
+//$q = "SELECT usuarios.Usuario, ubicacion.Calle FROM usuarios INNER JOIN ubicacion ON usuarios.id = ubicacion.id_mercado WHERE usuario = '".$usuario."'";
+	/*$consulta = $conexion->query($q);
+	$perfil = $consulta->fetch_array();
+	if($perfil > 0){
+		$user = $perfil;
+	}*/
+	
+//$conexion->close();
+
 ?>
-	<title>Representative</title>
+	<title>Integrantes mercado</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="../css/mercado.css">
+	<link rel="stylesheet" href="../css/main.css">
+	<link rel="stylesheet" href="../css/styless.css">
 </head>
 <body>
 		<!-- SideBar -->
@@ -19,7 +50,7 @@ session_start();
 				<div class="full-box dashboard-sideBar-UserInfo">
 				<figure class="full-box">
 					<img src="../img/fruits.png" alt="UserIcon">
-					<figcaption class="text-center text-titles">Admin</figcaption>
+					<figcaption class="text-center text-titles">bienvenido <strong><?php echo $_SESSION['usuario']; ?></strong></figcaption>
 				</figure>
 				<ul class="full-box list-unstyled text-center">
 					<!--<li>
@@ -37,11 +68,11 @@ session_start();
 			</div>
 			<!-- SideBar Menu -->
 			<ul class="list-unstyled full-box dashboard-sideBar-Menu">
-				<li>
+				<!--<li>
 					<a href="iniciomer.php">
-						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>--> <img src="../img/house.png" alt="bird">INICIO
+						<!--<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>-- <img src="../img/house.png" alt="bird">INICIO
 					</a>
-				</li>
+				</li>-->
 				<!--<li>
 					<a href="#!" class="btn-sideBar-SubMenu">
 						<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administration <i class="zmdi zmdi-caret-down pull-right"></i>
@@ -169,10 +200,10 @@ session_start();
 			<div class="page-header">
 			  <h1 class="text-titles"><img src="../img/2.jpg" alt="bir"><!--<i class="zmdi zmdi-male-female zmdi-hc-fw"></i>--> Usuario <small>Perfil</small></h1>
 			</div>
-			<p class="lead">En esta parte puedes agregar y editar a los usuarios que contiene el sistema!</p>
+			<p class="lead">En esta parte puedes agregar y editar a los integrantes que contiene el sistema!</p>
 		</div>
 		<div class="container-fluid">
-			<div class="row">
+			<!--<div class="row">
 				<div class="col-xs-12">
 					<ul class="nav nav-tabs" style="margin-bottom: 15px;">
 					  	<li class="active"><a href="#new" data-toggle="tab">New</a></li>
@@ -316,7 +347,51 @@ session_start();
 					  	</div>
 					</div>
 				</div>
+			</div>-->
+
+			<a href="regiscertificli.php">Registrar</a></td>
+		</form>
+		<table>	
+				<div id="barrabuscar">
+			<form method="POST">
+			<input type="submit" value="Buscar" name="btnbuscar"><input type="text" name="txtbuscar" id="cajabuscar" placeholder="&#128270;Ingresar nombre de usuario">
+			</form>
 			</div>
+				<tr><th colspan="5"><h1>LISTA USUARIOS</h1><th><a style="font-weight: normal; font-size: 14px;" onclick="abrirform()"></a></th></tr>
+				<tr>
+				<th>Id</th>
+				<th>Nombre</th>
+				<th>Producto</th>
+				<th>idusuario</th>
+				<!--<th>Alcance</th>-->
+				<!--<th>Acción</th>-->
+				</tr>
+			<?php 
+
+		if(isset($_POST['btnbuscar']))
+		{
+		$buscar = $_POST['txtbuscar'];
+		$queryusuarios = mysqli_query($conexion, "SELECT idintegrante,Nombre,producto FROM integrantes where Nombre like '".$buscar."%'");
+		}
+		else
+		{
+		$queryusuarios = mysqli_query($conexion, "SELECT * FROM integrantes ORDER BY idintegrante asc");
+		}
+		//$numerofila = 0;
+        while($mostrar = mysqli_fetch_array($queryusuarios)) 
+		{    //$numerofila++;    
+            echo "<tr>";
+			//echo "<td>".$numerofila."</td>";
+			echo "<td>".$mostrar['idintegrante']."</td>";
+            echo "<td>".$mostrar['Nombre']."</td>";
+            echo "<td>".$mostrar['producto']."</td>";
+            echo "<td>".$mostrar['idusuarioo']."</td>";    
+			//echo "<td>".$mostrar['Alcance']."</td>";  
+            echo "<td style='width:26%'><a href=\"editar.php?idintegrante=$mostrar[idintegrante]\">Modificar</a> | <a href=\"eliminar.php?cod=$mostrar[idintegrante]\" onClick=\"return confirm('¿Estás seguro de eliminar a $mostrar[Nombre]?')\">Eliminar</a></td>";           
+		}
+        ?>
+    	</table>
+
 		</div>
 	</section>
 
